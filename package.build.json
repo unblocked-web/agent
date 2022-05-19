@@ -8,8 +8,8 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "jest": "^27.5.1",
-    "jest-environment-node": "^27.5.1",
+    "jest": "^28.1.0",
+    "jest-environment-node": "^28.1.0",
     "jest-summary-reporter": "^0.0.2"
   },
   "dependencies": {}

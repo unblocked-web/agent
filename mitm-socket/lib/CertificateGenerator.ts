@@ -46,7 +46,7 @@ export default class CertificateGenerator extends BaseIpcHandler {
     return { key, cert };
   }
 
-  public close(): void {
+  public override close(): void {
     super.close();
     for (const pending of this.pendingCertsById.values())
       pending.reject(new CanceledPromiseError('Closing Certificate Generator'));

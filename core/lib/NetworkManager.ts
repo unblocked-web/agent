@@ -88,7 +88,7 @@ export default class NetworkManager extends TypedEventEmitter<IBrowserNetworkEve
     this.events.on(session, 'Network.requestServedFromCache', this.onNetworkRequestServedFromCache);
   }
 
-  public emit<
+  public override emit<
     K extends (keyof IBrowserNetworkEvents & string) | (keyof IBrowserNetworkEvents & symbol),
   >(eventType: K, event?: IBrowserNetworkEvents[K]): boolean {
     if (this.parentManager) {

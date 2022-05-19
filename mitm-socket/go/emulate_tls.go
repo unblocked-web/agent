@@ -29,12 +29,14 @@ func EmulateTls(dialConn net.Conn, addr string, sessionArgs SessionArgs, connect
 		// lowest supported is chrome 72, otherwise channel id extensions crop up
 		if chromeVersion < 83 {
 			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_72)
-		} else {
+		} else if chromeVersion < 95 {
 			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_83)
+		} else {
+			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_95)
 		}
 	} else {
 		// default to chrome83
-		spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_83)
+		spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_95)
 	}
 
 	tlsConfig := tls.Config{

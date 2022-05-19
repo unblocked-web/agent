@@ -10,8 +10,8 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"math/big"
 	"log"
+	"math/big"
 	"net"
 	"os"
 	"sync/atomic"
@@ -72,7 +72,6 @@ func readPrivateKeyFromDisk(file string) (*rsa.PrivateKey, error) {
 	return privatePkcs8RsaKey, nil
 }
 
-
 // NewAuthority creates a new CA certificate and associated private key.
 func NewAuthority() (*x509.Certificate, *rsa.PrivateKey, error) {
 	var caFile string = "ca.der"
@@ -81,16 +80,15 @@ func NewAuthority() (*x509.Certificate, *rsa.PrivateKey, error) {
 	certFromDisk, err := readCertFromDisk(caFile)
 
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
-       log.Printf("Error reading cert from disk", caFile, err)
-    } else if err == nil {
+		log.Printf("Error reading cert from disk", caFile, err)
+	} else if err == nil {
 		keyFromDisk, err := readPrivateKeyFromDisk(caKeyFile)
 		if err != nil {
-            log.Printf("Error reading private key from disk", caKeyFile, err)
+			log.Printf("Error reading private key from disk", caKeyFile, err)
 		} else {
 			return certFromDisk, keyFromDisk, nil
 		}
 	}
-
 
 	// Generating the private key that will be used for domain certificates
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
@@ -136,8 +134,8 @@ func NewAuthority() (*x509.Certificate, *rsa.PrivateKey, error) {
 		return nil, nil, err
 	}
 
-    err = os.WriteFile(caFile, raw, 0600)
-    if err != nil {
+	err = os.WriteFile(caFile, raw, 0600)
+	if err != nil {
 		return nil, nil, err
 	}
 
@@ -145,8 +143,8 @@ func NewAuthority() (*x509.Certificate, *rsa.PrivateKey, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-    err = os.WriteFile(caKeyFile, privBytes, 0600)
-    if err != nil {
+	err = os.WriteFile(caKeyFile, privBytes, 0600)
+	if err != nil {
 		return nil, nil, err
 	}
 
@@ -190,10 +188,10 @@ func NewCertConfig(ca *x509.Certificate, caPrivateKey *rsa.PrivateKey) (*CertCon
 	}
 
 	if needsSave {
-	    err = os.WriteFile("privKey.der", privBytes, 0600)
-	    if err != nil {
-	        return nil,err
-	    }
+		err = os.WriteFile("privKey.der", privBytes, 0600)
+		if err != nil {
+			return nil, err
+		}
 	}
 	pub := priv.Public()
 
