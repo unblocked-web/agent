@@ -5,7 +5,7 @@
   "description": "The Unblocked Automated Web Browser",
   "scripts": {
     "prepare": "husky install",
-    "bump-version": "ulx-repo-bump-version",
+    "bump-version": "ulx-repo-version-bump",
     "build": "yarn tsc && cd build && yarn",
     "build:dist": "shx rm -rf build-dist && tsc -b tsconfig.dist.json && ulx-repo-after-build --dist",
     "build:dist-local": "yarn build:dist && cd build-dist && UBK_MITM_REBUILD_SOCKET=1 yarn",
@@ -39,7 +39,7 @@
     "@commitlint/config-conventional": "^12.0.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.17.9",
-    "@ulixee/repo-tools": "^1.0.2",
+    "@ulixee/repo-tools": "^1.0.6",
     "cross-env": "^7.0.3",
     "husky": "^7.0.1",
     "jest": "^27.0.6",
