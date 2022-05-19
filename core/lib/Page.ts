@@ -220,6 +220,7 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
     browserContext.trackPage(this);
 
     this.isReady = this.initialize().catch(error => {
+      if (error instanceof CanceledPromiseError && this.isClosing) return;
       this.logger.error('Page.initializationError', {
         error,
       });
@@ -558,6 +559,7 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
 
   didClose(closeError?: Error): void {
     if (this.closePromise.isResolved) return;
+    this.isClosing = true;
     this.isClosed = true;
     try {
       this.framesManager.close(closeError);

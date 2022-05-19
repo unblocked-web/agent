@@ -4,5 +4,8 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "yarn workspace @unblocked-web/agent-mitm-socket postinstall"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
