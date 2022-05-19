@@ -32,7 +32,7 @@ Each Agent implements the full Unblocked [Plugin Specification](https://github.c
 
 ### new Agent*(options)* {#constructor}
 
-Creates a new sandboxed browser window. An Agent wires together an isolated Browser Context and a Man-in-the-Middle session. It will create an [UnblockedPlugins](./UnblockedPlugins.md) context that implements the Unblocked Plugin specification.
+Creates a new sandboxed browser window. An Agent wires together an isolated Browser Context and a Man-in-the-Middle session. It will create a [Plugins](./Plugins.md) context that implements the Unblocked Plugin specification.
 
 ```js
 const Agent = require('@ulixee/agent');
@@ -40,7 +40,7 @@ const Agent = require('@ulixee/agent');
 (async () => {
   const agent = new Agent({
     locale: 'en-US,en',
-    unblockedPlugins: [LocalePlugin], // add plugins that implement locale!
+    plugins: [LocalePlugin], // add plugins that implement locale!
   });
 })();
 ```
