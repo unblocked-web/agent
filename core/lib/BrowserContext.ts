@@ -11,7 +11,10 @@ import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import ProtocolMapping from 'devtools-protocol/types/protocol-mapping';
 import { IPage } from '@unblocked-web/specifications/agent/browser/IPage';
-import { IBrowserContextHooks, IInteractHooks } from '@unblocked-web/specifications/agent/hooks/IHooks';
+import {
+  IBrowserContextHooks,
+  IInteractHooks,
+} from '@unblocked-web/specifications/agent/hooks/IHooks';
 import IProxyConnectionOptions from '../interfaces/IProxyConnectionOptions';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
 import ICommandMarker from '../interfaces/ICommandMarker';
@@ -345,7 +348,9 @@ export default class BrowserContext
       .filter(c => {
         if (!url) return true;
 
-        if (url.hostname !== c.domain && !url.hostname.includes(c.domain)) return false;
+        let domain = c.domain;
+        if (!domain.startsWith('.')) domain = '.' + domain;
+        if (!('.' + url.hostname).endsWith(domain)) return false;
         if (!url.pathname.startsWith(c.path)) return false;
         if (c.secure === true && url.protocol !== 'https:') return false;
         return true;
