@@ -38,8 +38,8 @@ export default class FrameNavigations
 
   constructor(readonly frame: Frame, logger: IBoundLog) {
     super();
-    this.setEventsToLog(['navigation-requested', 'status-change']);
     this.logger = logger.createChild(module);
+    this.setEventsToLog(this.logger, ['navigation-requested', 'status-change']);
   }
 
   public get(id: number): INavigation {

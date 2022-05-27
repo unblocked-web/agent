@@ -56,6 +56,8 @@ export default class Pool extends TypedEventEmitter<{
     promise: IResolvablePromise<void>;
   }[] = [];
 
+  protected logger: IBoundLog;
+
   private isClosing: Resolvable<void>;
   private mitmStartPromise: Promise<MitmProxy>;
 

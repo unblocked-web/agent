@@ -5,6 +5,7 @@ import { Protocol } from '@unblocked-web/specifications/agent/browser/IDevtoolsS
 import Frame from './Frame';
 import BrowserContext from './BrowserContext';
 import TargetInfo = Protocol.Target.TargetInfo;
+import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 
 interface IMessageDetails {
   sessionType: IDevtoolsLogEvents['devtools-message']['sessionType'];
@@ -34,6 +35,7 @@ export default class DevtoolsSessionLogger extends TypedEventEmitter<IDevtoolsLo
   public readonly truncateMessageResponses: Set<string>;
   public readonly truncateParams: Map<string, { maxLength: number; path: string | string[] }[]>;
 
+  private logger: IBoundLog;
   private events = new EventSubscriber();
   private fetchRequestIdToNetworkId = new Map<string, string>();
   private devtoolsSessions = new WeakSet<DevtoolsSession>();

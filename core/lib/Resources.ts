@@ -18,6 +18,7 @@ import BrowserContext from './BrowserContext';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import IBrowserRequestMatcher from '@unblocked-web/agent-mitm/interfaces/IBrowserRequestMatcher';
 import { IMitmRequestPendingBrowserRequest, IResourceEvents } from '../interfaces/IResourceEvents';
+import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 
 export default class Resources
   extends TypedEventEmitter<IResourceEvents>
@@ -30,6 +31,7 @@ export default class Resources
 
   public readonly resourcesById = new Map<number, IResourceMeta>();
   public readonly cookiesByDomain = new Map<string, Record<string, ICookie>>();
+  protected logger: IBoundLog;
 
   private readonly browserRequestIdToTabId = new Map<string, number>();
   private readonly mitmErrorsByUrl = new Map<

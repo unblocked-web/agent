@@ -105,7 +105,7 @@ describe('Pages', () => {
     });
 
     it('page.close should work with window.close', async () => {
-      const newPagePromise = new Promise<IPage>(resolve => {
+      const newPagePromise = new Promise<Page>(resolve => {
         page.popupInitializeFn = async page1 => {
           resolve(page1);
         };

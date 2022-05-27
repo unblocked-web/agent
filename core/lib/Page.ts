@@ -168,7 +168,7 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
     this.framesManager = new FramesManager(this, devtoolsSession);
 
     this.storeEventsWithoutListeners = true;
-    this.setEventsToLog([
+    this.setEventsToLog(this.logger, [
       'frame-created',
       'websocket-frame',
       'websocket-handshake',

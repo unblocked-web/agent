@@ -140,7 +140,7 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
     this.parentFrame = parentFrame;
     this.interactor = new Interactor(this);
     this.checkIfAttached = checkIfAttached;
-    this.setEventsToLog(['frame-navigated']);
+    this.setEventsToLog(this.logger, ['frame-navigated']);
     this.storeEventsWithoutListeners = true;
     this.onAttached(internalFrame);
   }

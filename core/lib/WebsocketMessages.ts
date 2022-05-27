@@ -18,6 +18,7 @@ export default class WebsocketMessages extends TypedEventEmitter<{
   } = {};
 
   private messageIdCounter = 0;
+  private logger: IBoundLog;
 
   constructor(logger: IBoundLog) {
     super();

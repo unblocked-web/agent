@@ -49,6 +49,8 @@ export default class MitmSocket
   public connectError?: string;
   public receivedEOF = false;
 
+  protected logger: IBoundLog;
+
   private server: net.Server;
   private connectPromise: Resolvable<void>;
   private socketReadyPromise = new Resolvable<void>();
