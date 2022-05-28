@@ -1,6 +1,5 @@
 import ConsoleMessage from '../lib/ConsoleMessage';
 import sizeOf from 'image-size';
-import { IPage } from '@unblocked-web/specifications/agent/browser/IPage';
 import { TestServer } from './server';
 import { Browser } from '../index';
 import { setContent } from './_pageTestUtils';
