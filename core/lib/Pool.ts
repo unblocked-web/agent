@@ -125,10 +125,12 @@ export default class Pool extends TypedEventEmitter<{
     launchArgs?: IBrowserLaunchArgs,
   ): Promise<Browser> {
     return await this.browserCreationQueue.run(async () => {
-      if (!this.sharedMitmProxy) await this.start();
+      if (!this.sharedMitmProxy && !launchArgs?.disableMitm) await this.start();
 
       launchArgs ??= {};
-      launchArgs.proxyPort ??= this.sharedMitmProxy?.port;
+      if (!launchArgs.disableMitm) {
+        launchArgs.proxyPort ??= this.sharedMitmProxy?.port;
+      }
       const browser = new Browser(engine, hooks, launchArgs);
 
       const existing = this.browserWithEngine(browser.engine);
