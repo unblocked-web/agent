@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.3](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2022-06-09)
+
+
+### Bug Fixes
+
+* cross domain cookies ([55b33c5](https://github.com/unblocked-web/agent/commit/55b33c5cf0d5cf998d22cabdf750d38a55f6183e))
+* disableMitm setting broken ([2e7a9e0](https://github.com/unblocked-web/agent/commit/2e7a9e0fd9559d3fdd73b065905dea2a74d2501d))
+* lint issue ([443dd3b](https://github.com/unblocked-web/agent/commit/443dd3b23d3748d414ec827b84d338dd55a5042c))
+* **mitm-socket:** alps TLS extension ([aac86f3](https://github.com/unblocked-web/agent/commit/aac86f372cc55dbf28b89164b1c1559f2829c542))
+
+
+
+
+
 # [2.0.0-alpha.2](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2022-05-19)
 
 

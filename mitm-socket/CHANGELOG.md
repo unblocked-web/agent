@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.3](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2022-06-09)
+
+
+### Bug Fixes
+
+* **mitm-socket:** alps TLS extension ([aac86f3](https://github.com/unblocked-web/unblocked/commit/aac86f372cc55dbf28b89164b1c1559f2829c542))
+
+
+
+
+
 # [2.0.0-alpha.2](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2022-05-19)
 
 
