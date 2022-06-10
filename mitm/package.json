@@ -4,7 +4,7 @@
   "description": "Man-in-the-middle proxy to fix chrome request/response",
   "main": "index.js",
   "dependencies": {
-    "@ulixee/commons": "2.0.0-alpha.4",
+    "@ulixee/commons": "2.0.0-alpha.5",
     "@unblocked-web/agent-mitm-socket": "2.0.0-alpha.3",
     "@unblocked-web/specifications": "2.0.0-alpha.2",
     "dns-packet": "^5.2.4",
