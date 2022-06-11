@@ -6,5 +6,5 @@ export default {
   dataDir:
     process.env.UBK_NETWORK_DIR ?? process.env.UBK_DATA_DIR ?? Path.join(Os.tmpdir(), '.ulixee'),
   isLogDebug: !!process.env.DEBUG?.match(/[,]?ubk[:,]?/),
-  useLogColors: !Boolean(JSON.parse(process.env.NODE_DISABLE_COLORS ?? '0')),
+  useLogColors: !JSON.parse(process.env.NODE_DISABLE_COLORS ?? '0'),
 };

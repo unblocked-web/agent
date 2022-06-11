@@ -1,6 +1,8 @@
 import IEmulationProfile from '@unblocked-web/specifications/plugin/IEmulationProfile';
 import IUnblockedPlugins from '@unblocked-web/specifications/plugin/IUnblockedPlugins';
-import IUnblockedPlugin, { IUnblockedPluginClass } from '@unblocked-web/specifications/plugin/IUnblockedPlugin';
+import IUnblockedPlugin, {
+  IUnblockedPluginClass,
+} from '@unblocked-web/specifications/plugin/IUnblockedPlugin';
 import { URL } from 'url';
 import {
   IInteractionGroups,
@@ -21,11 +23,11 @@ import IDnsSettings from '@unblocked-web/specifications/agent/net/IDnsSettings';
 import IPoint from '@unblocked-web/specifications/agent/browser/IPoint';
 import IDevtoolsSession from '@unblocked-web/specifications/agent/browser/IDevtoolsSession';
 import ChromeApp from '@ulixee/chrome-app';
-import ChromeEngine from './ChromeEngine';
 import { IHooksProvider } from '@unblocked-web/specifications/agent/hooks/IHooks';
+import ChromeEngine from './ChromeEngine';
 import Interactor from './Interactor';
 
-type ICallbackFn = (...[]) => Promise<void> | void;
+type ICallbackFn = (...args: any[]) => Promise<void> | void;
 
 export default class Plugins implements IUnblockedPlugins {
   public profile: IEmulationProfile = {};

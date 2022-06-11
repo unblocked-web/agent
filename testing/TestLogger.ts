@@ -78,13 +78,13 @@ export default class TestLogger implements ILog {
 
     Fs.appendFileSync(
       `${this.outPath}-${TestLogger.testNumber}.jsonl`,
-      JSON.stringify({
+      `${JSON.stringify({
         timestamp,
         level,
         path: this.module,
         action,
         params,
-      }) + '\n',
+      })  }\n`,
     );
     if (logLevels[level] >= logLevels[this.level]) {
       // eslint-disable-next-line no-console

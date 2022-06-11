@@ -50,12 +50,14 @@ ${remedyMessage}`);
   }
 
   static fromPackageName(npmPackage: string): ChromeEngine {
+    // eslint-disable-next-line import/no-dynamic-require
     const Chrome = require(npmPackage) as any;
     const engine = new Chrome();
     return new ChromeEngine(engine);
   }
 
   static default(): ChromeEngine {
+    // eslint-disable-next-line import/no-dynamic-require
     const Chrome = require(this.defaultPackageName) as any;
     const engine = new Chrome();
     return new ChromeEngine(engine);

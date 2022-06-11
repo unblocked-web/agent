@@ -15,8 +15,8 @@ class MouseEvents {
   public static getWindowOffset(): IWindowOffset {
     const scrollElement = document.scrollingElement ?? document.documentElement;
     return {
-      innerHeight,
-      innerWidth,
+      innerHeight, // eslint-disable-line no-restricted-globals
+      innerWidth, // eslint-disable-line no-restricted-globals
       scrollY: scrollElement?.scrollTop ?? 0,
       scrollX: scrollElement?.scrollLeft ?? 0,
       scrollHeight: scrollElement?.scrollHeight ?? 0,

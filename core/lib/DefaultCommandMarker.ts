@@ -1,6 +1,6 @@
+import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import BrowserContext from './BrowserContext';
 import ICommandMarker from '../interfaces/ICommandMarker';
-import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 
 interface IMarker {
   id: number;

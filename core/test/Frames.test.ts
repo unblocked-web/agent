@@ -1,9 +1,9 @@
+import { Helpers, TestLogger } from '@unblocked-web/agent-testing/index';
+import { browserEngineOptions } from '@unblocked-web/agent-testing/browserUtils';
 import { TestServer } from './server';
 import { attachFrame, setContent } from './_pageTestUtils';
-import { Helpers, TestLogger } from '@unblocked-web/agent-testing/index';
 import Agent from '../lib/Agent';
 import { Browser, BrowserContext, Page } from '../index';
-import { browserEngineOptions } from '@unblocked-web/agent-testing/browserUtils';
 
 describe('Frames', () => {
   let server: TestServer;

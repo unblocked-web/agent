@@ -18,7 +18,7 @@ async function createAgent(): Promise<{ agent: Agent; page: Page }> {
   const agent = pool.createAgent({ logger: TestLogger.forTest(module) });
   const page = await agent.newPage();
   Helpers.needsClosing.push(agent);
-  return { agent: agent, page };
+  return { agent, page };
 }
 
 beforeEach(() => {

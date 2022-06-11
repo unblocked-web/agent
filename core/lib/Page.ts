@@ -22,15 +22,6 @@ import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import IRegisteredEventListener from '@ulixee/commons/interfaces/IRegisteredEventListener';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
-import DevtoolsSession from './DevtoolsSession';
-import NetworkManager from './NetworkManager';
-import { Keyboard } from './Keyboard';
-import Mouse from './Mouse';
-import FramesManager from './FramesManager';
-import BrowserContext from './BrowserContext';
-import { Worker } from './Worker';
-import ConsoleMessage from './ConsoleMessage';
-import Frame from './Frame';
 import IScreenshotOptions from '@unblocked-web/specifications/agent/browser/IScreenshotOptions';
 import {
   IElementInteractVerification,
@@ -42,11 +33,20 @@ import * as Url from 'url';
 import Timer from '@ulixee/commons/lib/Timer';
 import { ILoadStatus, LoadStatus } from '@unblocked-web/specifications/agent/browser/Location';
 import { IJsPath } from '@unblocked-web/js-path';
-import IWaitForOptions from '../interfaces/IWaitForOptions';
 import INavigation from '@unblocked-web/specifications/agent/browser/INavigation';
 import IExecJsPathResult from '@unblocked-web/specifications/agent/browser/IExecJsPathResult';
-import DomStorageTracker, { IDomStorageEvents } from './DomStorageTracker';
 import IDialog from '@unblocked-web/specifications/agent/browser/IDialog';
+import DevtoolsSession from './DevtoolsSession';
+import NetworkManager from './NetworkManager';
+import { Keyboard } from './Keyboard';
+import Mouse from './Mouse';
+import FramesManager from './FramesManager';
+import BrowserContext from './BrowserContext';
+import { Worker } from './Worker';
+import ConsoleMessage from './ConsoleMessage';
+import Frame from './Frame';
+import IWaitForOptions from '../interfaces/IWaitForOptions';
+import DomStorageTracker, { IDomStorageEvents } from './DomStorageTracker';
 import ConsoleAPICalledEvent = Protocol.Runtime.ConsoleAPICalledEvent;
 import ExceptionThrownEvent = Protocol.Runtime.ExceptionThrownEvent;
 import WindowOpenEvent = Protocol.Page.WindowOpenEvent;
@@ -138,7 +138,8 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
     pageOptions?: IPageCreateOptions,
   ) {
     super();
-    this.tabId = browserContext.idTracker.tabId += 1;
+    browserContext.idTracker.tabId += 1;
+    this.tabId = browserContext.idTracker.tabId;
     this.opener = opener;
     this.targetId = targetId;
     this.browserContext = browserContext;

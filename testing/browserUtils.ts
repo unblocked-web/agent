@@ -3,12 +3,13 @@ import Browser from '@unblocked-web/agent/lib/Browser';
 import ChromeEngine from '@unblocked-web/agent/lib/ChromeEngine';
 import { IBrowserContextHooks, IBrowserHooks } from '@unblocked-web/specifications/agent/hooks/IHooks';
 import IBrowser from '@unblocked-web/specifications/agent/browser/IBrowser';
+import DefaultChrome = require('@ulixee/chrome-98-0');
 import env from './env';
 import { Helpers } from './index';
-import DefaultChrome = require('@ulixee/chrome-98-0');
 
 let ChromeApp = DefaultChrome;
 if (env.defaultBrowserId) {
+  // eslint-disable-next-line import/no-dynamic-require
   ChromeApp = require(`@ulixee/${env.defaultBrowserId}`);
 }
 

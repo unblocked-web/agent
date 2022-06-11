@@ -14,11 +14,11 @@ import IHttpResourceLoadDetails from '@unblocked-web/specifications/agent/net/IH
 import HeadersHandler from '@unblocked-web/agent-mitm/handlers/HeadersHandler';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import { Cookie } from 'tough-cookie';
-import BrowserContext from './BrowserContext';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import IBrowserRequestMatcher from '@unblocked-web/agent-mitm/interfaces/IBrowserRequestMatcher';
-import { IMitmRequestPendingBrowserRequest, IResourceEvents } from '../interfaces/IResourceEvents';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
+import { IMitmRequestPendingBrowserRequest, IResourceEvents } from '../interfaces/IResourceEvents';
+import BrowserContext from './BrowserContext';
 
 export default class Resources
   extends TypedEventEmitter<IResourceEvents>

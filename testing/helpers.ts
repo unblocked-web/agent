@@ -20,8 +20,8 @@ import * as stream from 'stream';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import MitmSocket from '@unblocked-web/agent-mitm-socket';
 import MitmSocketSession from '@unblocked-web/agent-mitm-socket/lib/MitmSocketSession';
-import { Helpers, TestLogger } from './index';
 import MitmEnv from '@unblocked-web/agent-mitm/env'; // eslint-disable-line import/no-extraneous-dependencies
+import { Helpers, TestLogger } from './index';
 
 export const needsClosing: { close: () => Promise<any> | void; onlyCloseOnFinal?: boolean }[] = [];
 

@@ -1,26 +1,26 @@
 import '@ulixee/commons/lib/SourceMapSupport';
 import { RequestSession } from '@unblocked-web/agent-mitm';
-import BrowserContext from './BrowserContext';
 import Log from '@ulixee/commons/lib/Logger';
 import MitmProxy from '@unblocked-web/agent-mitm/lib/MitmProxy';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
-import env from '../env';
-import IProxyConnectionOptions from '../interfaces/IProxyConnectionOptions';
-import Pool from './Pool';
-import Browser from './Browser';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import { nanoid } from 'nanoid';
-import Page from './Page';
 import { IHooksProvider } from '@unblocked-web/specifications/agent/hooks/IHooks';
-import ICommandMarker from '../interfaces/ICommandMarker';
 import IBrowserEngine from '@unblocked-web/specifications/agent/browser/IBrowserEngine';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
 import IEmulationProfile, {
   IEmulationOptions,
 } from '@unblocked-web/specifications/plugin/IEmulationProfile';
-import Plugins from './Plugins';
 import { IUnblockedPluginClass } from '@unblocked-web/specifications/plugin/IUnblockedPlugin';
+import Plugins from './Plugins';
+import ICommandMarker from '../interfaces/ICommandMarker';
+import Page from './Page';
+import Browser from './Browser';
+import Pool from './Pool';
+import IProxyConnectionOptions from '../interfaces/IProxyConnectionOptions';
+import env from '../env';
+import BrowserContext from './BrowserContext';
 
 const { log } = Log(module);
 
@@ -57,9 +57,9 @@ export default class Agent extends TypedEventEmitter<{ close: void }> {
     if (this.isolatedMitm) {
       // don't use password for an isolated mitm proxy
       return { address: `localhost:${this.isolatedMitm.port}` };
-    } else {
+    } 
       return { address: null, password: this.id };
-    }
+    
   }
 
   constructor(private readonly options: IAgentCreateOptions = {}, readonly pool?: Pool) {

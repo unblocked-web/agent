@@ -2,9 +2,9 @@ import { Helpers, TestLogger } from '@unblocked-web/agent-testing';
 import { InteractionCommand } from '@unblocked-web/specifications/agent/interact/IInteractions';
 import { ITestKoaServer } from '@unblocked-web/agent-testing/helpers';
 import { LoadStatus, LocationStatus } from '@unblocked-web/specifications/agent/browser/Location';
-import { Agent, Pool } from '../index';
 import IViewport from '@unblocked-web/specifications/agent/browser/IViewport';
 import { defaultBrowserEngine, PageHooks } from '@unblocked-web/agent-testing/browserUtils';
+import { Agent, Pool } from '../index';
 import { IAgentCreateOptions } from '../lib/Agent';
 
 let koaServer: ITestKoaServer;

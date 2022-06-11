@@ -6,31 +6,31 @@ import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import { NavigationReason } from '@unblocked-web/specifications/agent/browser/NavigationReason';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
-import ProtocolError from '../errors/ProtocolError';
-import DevtoolsSession from './DevtoolsSession';
-import ConsoleMessage from './ConsoleMessage';
-import FramesManager, { DEFAULT_PAGE, ISOLATED_WORLD } from './FramesManager';
-import { NavigationLoader } from './NavigationLoader';
 import IPoint from '@unblocked-web/specifications/agent/browser/IPoint';
-import { JsPath } from './JsPath';
-import MouseListener from './MouseListener';
-import Page from './Page';
-import Interactor from './Interactor';
 import IWindowOffset from '@unblocked-web/specifications/agent/browser/IWindowOffset';
 import { IInteractionGroups } from '@unblocked-web/specifications/agent/interact/IInteractions';
 import IRegisteredEventListener from '@ulixee/commons/interfaces/IRegisteredEventListener';
 import { IInteractHooks } from '@unblocked-web/specifications/agent/hooks/IHooks';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
-import FrameNavigations from './FrameNavigations';
-import FrameNavigationsObserver from './FrameNavigationsObserver';
 import {
   ILoadStatus,
   ILocationTrigger,
   LoadStatus,
 } from '@unblocked-web/specifications/agent/browser/Location';
 import Timer from '@ulixee/commons/lib/Timer';
-import IWaitForOptions from '../interfaces/IWaitForOptions';
 import INavigation from '@unblocked-web/specifications/agent/browser/INavigation';
+import ProtocolError from '../errors/ProtocolError';
+import DevtoolsSession from './DevtoolsSession';
+import ConsoleMessage from './ConsoleMessage';
+import FramesManager, { DEFAULT_PAGE, ISOLATED_WORLD } from './FramesManager';
+import { NavigationLoader } from './NavigationLoader';
+import { JsPath } from './JsPath';
+import MouseListener from './MouseListener';
+import Page from './Page';
+import Interactor from './Interactor';
+import FrameNavigations from './FrameNavigations';
+import FrameNavigationsObserver from './FrameNavigationsObserver';
+import IWaitForOptions from '../interfaces/IWaitForOptions';
 import PageFrame = Protocol.Page.Frame;
 
 const ContextNotFoundCode = -32000;
@@ -129,7 +129,9 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
     parentFrame: Frame | null,
   ) {
     super();
-    this.frameId = framesManager.page.browserContext.idTracker.frameId += 1;
+    const idTracker = framesManager.page.browserContext.idTracker;
+    idTracker.frameId += 1
+    this.frameId = idTracker.frameId;
     this.#framesManager = framesManager;
     this.activeContextIds = activeContextIds;
     this.devtoolsSession = devtoolsSession;

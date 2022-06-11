@@ -6,8 +6,8 @@ import IDomStorage, { IDomStorageForOrigin } from '@unblocked-web/specifications
 import { IIndexedDB } from '@unblocked-web/specifications/agent/browser/IIndexedDB';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
-import Page from './Page';
 import { IFrame } from '@unblocked-web/specifications/agent/browser/IFrame';
+import Page from './Page';
 import NetworkManager from './NetworkManager';
 import DevtoolsSession from './DevtoolsSession';
 import DomStorageItemAddedEvent = Protocol.DOMStorage.DomStorageItemAddedEvent;

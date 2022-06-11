@@ -1,6 +1,6 @@
-import Plugins from '../lib/Plugins';
 import { UnblockedPluginClassDecorator } from '@unblocked-web/specifications/plugin/IUnblockedPlugin';
 import IEmulationProfile from '@unblocked-web/specifications/plugin/IEmulationProfile';
+import Plugins from '../lib/Plugins';
 
 test('each plugin should be given a chance to pre-configure the profile', () => {
   const plugin1Activate = jest.fn();

@@ -8,13 +8,13 @@ import IBrowser, { IBrowserEvents } from '@unblocked-web/specifications/agent/br
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
 import { IBrowserHooks, IHooksProvider } from '@unblocked-web/specifications/agent/hooks/IHooks';
+import * as os from 'os';
 import { Connection } from './Connection';
 import BrowserContext, { IBrowserContextCreateOptions } from './BrowserContext';
 import DevtoolsSession from './DevtoolsSession';
 import BrowserProcess from './BrowserProcess';
 import BrowserLaunchError from '../errors/BrowserLaunchError';
 import env from '../env';
-import * as os from 'os';
 import GetVersionResponse = Protocol.Browser.GetVersionResponse;
 
 const { log } = Log(module);
