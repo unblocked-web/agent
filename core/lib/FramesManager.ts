@@ -6,15 +6,15 @@ import { IFrameManagerEvents } from '@unblocked-web/specifications/agent/browser
 import { bindFunctions } from '@ulixee/commons/lib/utils';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
+import IResourceMeta from '@unblocked-web/specifications/agent/net/IResourceMeta';
+import { IPageEvents } from '@unblocked-web/specifications/agent/browser/IPage';
+import { IDomPaintEvent } from '@unblocked-web/specifications/agent/browser/Location';
 import DevtoolsSession from './DevtoolsSession';
 import Frame from './Frame';
 import NetworkManager from './NetworkManager';
 import DomStorageTracker from './DomStorageTracker';
 import InjectedScripts from './InjectedScripts';
 import Page from './Page';
-import IResourceMeta from '@unblocked-web/specifications/agent/net/IResourceMeta';
-import { IPageEvents } from '@unblocked-web/specifications/agent/browser/IPage';
-import { IDomPaintEvent } from '@unblocked-web/specifications/agent/browser/Location';
 import Resources from './Resources';
 import FrameNavigatedEvent = Protocol.Page.FrameNavigatedEvent;
 import FrameTree = Protocol.Page.FrameTree;

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
-import IConnectionTransport from '../interfaces/IConnectionTransport';
 import Log from '@ulixee/commons/lib/Logger';
+import IConnectionTransport from '../interfaces/IConnectionTransport';
 import DevtoolsSession from './DevtoolsSession';
 
 const { log } = Log(module);

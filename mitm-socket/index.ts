@@ -4,11 +4,11 @@ import { unlink } from 'fs';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
 import { createIpcSocketPath } from '@ulixee/commons/lib/IpcUtils';
-import MitmSocketSession from './lib/MitmSocketSession';
 import IHttpSocketWrapper from '@unblocked-web/specifications/agent/net/IHttpSocketWrapper';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import IHttpSocketConnectOptions from '@unblocked-web/specifications/agent/net/IHttpSocketConnectOptions';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
+import MitmSocketSession from './lib/MitmSocketSession';
 
 let idCounter = 0;
 
@@ -33,6 +33,7 @@ export default class MitmSocket
   public localAddress: string;
   public serverName: string;
 
+  // eslint-disable-next-line no-multi-assign
   public id = (idCounter += 1);
 
   public createTime: Date;

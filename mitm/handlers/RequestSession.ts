@@ -11,11 +11,6 @@ import * as net from 'net';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import MitmSocket from '@unblocked-web/agent-mitm-socket/index';
 import { URL } from 'url';
-import MitmRequestAgent from '../lib/MitmRequestAgent';
-import IMitmRequestContext from '../interfaces/IMitmRequestContext';
-import { Dns } from '../lib/Dns';
-import ResourceState from '../interfaces/ResourceState';
-import IBrowserRequestMatcher from '../interfaces/IBrowserRequestMatcher';
 import {
   IBrowserContextHooks,
   INetworkHooks,
@@ -23,6 +18,11 @@ import {
 import { IPage } from '@unblocked-web/specifications/agent/browser/IPage';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
+import MitmRequestAgent from '../lib/MitmRequestAgent';
+import IMitmRequestContext from '../interfaces/IMitmRequestContext';
+import { Dns } from '../lib/Dns';
+import ResourceState from '../interfaces/ResourceState';
+import IBrowserRequestMatcher from '../interfaces/IBrowserRequestMatcher';
 
 export default class RequestSession
   extends TypedEventEmitter<IRequestSessionEvents>

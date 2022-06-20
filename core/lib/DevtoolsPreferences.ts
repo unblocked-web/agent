@@ -17,8 +17,8 @@
 import IDevtoolsSession, { Protocol } from '@unblocked-web/specifications/agent/browser/IDevtoolsSession';
 import * as fs from 'fs';
 import { bindFunctions } from '@ulixee/commons/lib/utils';
-import BindingCalledEvent = Protocol.Runtime.BindingCalledEvent;
 import IBrowserEngine from '@unblocked-web/specifications/agent/browser/IBrowserEngine';
+import BindingCalledEvent = Protocol.Runtime.BindingCalledEvent;
 
 const devtoolsPreferencesCallback = '_DevtoolsPreferencesCallback';
 

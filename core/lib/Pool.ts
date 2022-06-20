@@ -4,20 +4,19 @@ import Resolvable from '@ulixee/commons/lib/Resolvable';
 import IBrowserEngine from '@unblocked-web/specifications/agent/browser/IBrowserEngine';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
-import env from '../env';
-import DevtoolsPreferences from './DevtoolsPreferences';
 import Queue from '@ulixee/commons/lib/Queue';
 import ICertificateGenerator, {
   ICertificateStore,
 } from '@unblocked-web/agent-mitm/interfaces/ICertificateGenerator';
-import Agent, { IAgentCreateOptions } from './Agent';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
-import Browser from './Browser';
 import IResolvablePromise from '@ulixee/commons/interfaces/IResolvablePromise';
 import IBrowserLaunchArgs from '@unblocked-web/specifications/agent/browser/IBrowserLaunchArgs';
 import { IHooksProvider } from '@unblocked-web/specifications/agent/hooks/IHooks';
 import { IUnblockedPluginClass } from '@unblocked-web/specifications/plugin/IUnblockedPlugin';
+import Browser from './Browser';
+import Agent, { IAgentCreateOptions } from './Agent';
+import env from '../env';
 
 const { log } = Log(module);
 
@@ -140,11 +139,6 @@ export default class Pool extends TypedEventEmitter<{
 
       this.events.on(browser, 'new-context', this.watchForContextPagesClosed.bind(this));
       this.events.once(browser, 'close', this.onBrowserClosed.bind(this, browser.id));
-
-      if (browser.engine.isHeaded) {
-        const preferencesInterceptor = new DevtoolsPreferences(browser.engine);
-        browser.hooks.onDevtoolsPanelAttached = preferencesInterceptor.installOnConnect;
-      }
 
       await browser.launch();
       this.emit('browser-launched', { browser });

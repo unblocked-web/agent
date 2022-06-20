@@ -15,17 +15,17 @@ import {
   IBrowserContextHooks,
   IInteractHooks,
 } from '@unblocked-web/specifications/agent/hooks/IHooks';
-import IProxyConnectionOptions from '../interfaces/IProxyConnectionOptions';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
+import IDomStorage from '@unblocked-web/specifications/agent/browser/IDomStorage';
+import Log from '@ulixee/commons/lib/Logger';
+import IProxyConnectionOptions from '../interfaces/IProxyConnectionOptions';
 import ICommandMarker from '../interfaces/ICommandMarker';
 import Page, { IPageCreateOptions } from './Page';
 import { Worker } from './Worker';
 import Browser from './Browser';
 import DevtoolsSession from './DevtoolsSession';
-import IDomStorage from '@unblocked-web/specifications/agent/browser/IDomStorage';
 import Resources from './Resources';
 import WebsocketMessages from './WebsocketMessages';
-import Log from '@ulixee/commons/lib/Logger';
 import { DefaultCommandMarker } from './DefaultCommandMarker';
 import DevtoolsSessionLogger from './DevtoolsSessionLogger';
 import CookieParam = Protocol.Network.CookieParam;
@@ -122,7 +122,7 @@ export default class BrowserContext
     );
     this.id = browserContextId;
     this.logger ??= log.createChild(module, {
-      browserContextId: browserContextId,
+      browserContextId,
     });
   }
 
@@ -349,8 +349,8 @@ export default class BrowserContext
         if (!url) return true;
 
         let domain = c.domain;
-        if (!domain.startsWith('.')) domain = '.' + domain;
-        if (!('.' + url.hostname).endsWith(domain)) return false;
+        if (!domain.startsWith('.')) domain = `.${  domain}`;
+        if (!(`.${  url.hostname}`).endsWith(domain)) return false;
         if (!url.pathname.startsWith(c.path)) return false;
         if (c.secure === true && url.protocol !== 'https:') return false;
         return true;
@@ -374,7 +374,7 @@ export default class BrowserContext
           expires = undefined;
         } else if (expires.match(/^[.\d]+$/)) {
           expires = parseInt(expires, 10);
-          if (expires > 1e10) expires = expires / 1e3;
+          if (expires > 1e10) expires /= 1e3;
         } else {
           expires = new Date(expires).getTime() / 1e3;
         }

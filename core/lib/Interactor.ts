@@ -23,15 +23,15 @@ import IPoint from '@unblocked-web/specifications/agent/browser/IPoint';
 import IMouseResult from '@unblocked-web/specifications/agent/interact/IMouseResult';
 import IResolvablePromise from '@ulixee/commons/interfaces/IResolvablePromise';
 import { IInteractHooks } from '@unblocked-web/specifications/agent/hooks/IHooks';
+import IRect from '@unblocked-web/specifications/agent/browser/IRect';
+import { IKeyboard, IMouse } from '@unblocked-web/specifications/agent/interact/IInput';
+import IWindowOffset from '@unblocked-web/specifications/agent/browser/IWindowOffset';
+import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import Frame from './Frame';
 import { JsPath } from './JsPath';
 import MouseListener from './MouseListener';
 import * as rectUtils from './rectUtils';
-import IRect from '@unblocked-web/specifications/agent/browser/IRect';
-import { IKeyboard, IMouse } from '@unblocked-web/specifications/agent/interact/IInput';
 import BrowserContext from './BrowserContext';
-import IWindowOffset from '@unblocked-web/specifications/agent/browser/IWindowOffset';
-import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 
 const commandsNeedingScroll = new Set([
   InteractionCommand.click,
@@ -427,13 +427,13 @@ export default class Interactor implements IInteractionsHelper {
 
     if (isMousePositionXY(interactionStep.mousePosition)) {
       return [rect.x, rect.y];
-    } else {
-      const point = await rectUtils.createPointInRect(rect, {
-        paddingPercent: { height: 10, width: 10 },
-        constrainToViewport: constrainToViewport ? this.viewportSize : undefined,
-      });
-      return [point.x, point.y];
     }
+
+    const point = await rectUtils.createPointInRect(rect, {
+      paddingPercent: { height: 10, width: 10 },
+      constrainToViewport: constrainToViewport ? this.viewportSize : undefined,
+    });
+    return [point.x, point.y];
   }
 
   private async injectScrollToPositions(

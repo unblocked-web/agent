@@ -1,12 +1,12 @@
-import ConsoleMessage from '../lib/ConsoleMessage';
 import sizeOf from 'image-size';
+import { TestLogger } from '@unblocked-web/agent-testing';
+import { browserEngineOptions, PageHooks } from '@unblocked-web/agent-testing/browserUtils';
+import ConsoleMessage from '../lib/ConsoleMessage';
 import { TestServer } from './server';
 import { Browser } from '../index';
 import { setContent } from './_pageTestUtils';
 import Page from '../lib/Page';
 import BrowserContext from '../lib/BrowserContext';
-import { TestLogger } from '@unblocked-web/agent-testing';
-import { browserEngineOptions, PageHooks } from '@unblocked-web/agent-testing/browserUtils';
 
 describe('Pages', () => {
   let server: TestServer;

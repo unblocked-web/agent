@@ -15,8 +15,8 @@ class MouseEvents {
   public static getWindowOffset(): IWindowOffset {
     const scrollElement = document.scrollingElement ?? document.documentElement;
     return {
-      innerHeight,
-      innerWidth,
+      innerHeight, // eslint-disable-line no-restricted-globals
+      innerWidth, // eslint-disable-line no-restricted-globals
       scrollY: scrollElement?.scrollTop ?? 0,
       scrollX: scrollElement?.scrollLeft ?? 0,
       scrollHeight: scrollElement?.scrollHeight ?? 0,
@@ -67,6 +67,7 @@ class MouseEvents {
     window.addEventListener('mousedown', this.onMousedown, {
       once: true,
       capture: true,
+      passive: false,
     });
 
     return visibility;
@@ -85,28 +86,41 @@ class MouseEvents {
   }
 
   private static onMousedown(event: MouseEvent) {
-    const node = NodeTracker.getWatchedNodeWithId(this.targetNodeId);
+    const desiredClickTarget = NodeTracker.getWatchedNodeWithId(this.targetNodeId) as Element;
     const targetNodeId = event.target ? NodeTracker.watchNode(event.target as Node) : undefined;
     const relatedTargetNodeId = event.relatedTarget
       ? NodeTracker.watchNode(event.relatedTarget as Node)
       : undefined;
+
+    let hitElement = event.target as Node;
+    let didClickLocation =
+      desiredClickTarget.contains(hitElement) || desiredClickTarget === hitElement;
+    if (!didClickLocation) {
+      // try working around Chrome issues with shadow elements
+      hitElement = ObjectAtPath.elementFromPoint(event.clientX, event.clientY);
+      if (desiredClickTarget.contains(hitElement) || desiredClickTarget === hitElement) {
+        didClickLocation = true;
+      }
+    }
 
     const result: IMouseResult = {
       pageX: this.containerOffset.x + event.pageX - window.scrollX,
       pageY: this.containerOffset.y + event.pageY - window.scrollY,
       targetNodeId,
       relatedTargetNodeId,
-      didClickLocation: node.contains(event.target as Node) || node === event.target,
+      didClickLocation,
     };
 
     if (!result.didClickLocation) {
       event.cancelBubble = true;
       event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
       // @ts-ignore
-      result.targetNodePreview = generateNodePreview(event.target);
+      result.targetNodePreview = generateNodePreview(hitElement);
       // @ts-ignore
-      result.expectedNodePreview = generateNodePreview(node);
-      result.expectedNodeVisibility = this.getNodeVisibility(node);
+      result.expectedNodePreview = generateNodePreview(desiredClickTarget);
+      result.expectedNodeVisibility = this.getNodeVisibility(desiredClickTarget);
     }
 
     this.pendingEventResolve(result);

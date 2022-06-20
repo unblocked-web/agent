@@ -1,6 +1,6 @@
+import { BrowserUtils, TestLogger } from '@unblocked-web/agent-testing/index';
 import { TestServer } from './server';
 import { Browser, BrowserContext, Page } from '../index';
-import { BrowserUtils, TestLogger } from '@unblocked-web/agent-testing/index';
 
 describe('Page.navigate', () => {
   let server: TestServer;

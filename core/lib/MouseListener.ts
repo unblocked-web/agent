@@ -1,8 +1,8 @@
 import IMouseResult from '@unblocked-web/specifications/agent/interact/IMouseResult';
-import Frame from './Frame';
 import { INodeVisibility } from '@unblocked-web/js-path';
-import InjectedScripts from './InjectedScripts';
 import IWindowOffset from '@unblocked-web/specifications/agent/browser/IWindowOffset';
+import Frame from './Frame';
+import InjectedScripts from './InjectedScripts';
 
 export default class MouseListener {
   private readonly frame: Frame;

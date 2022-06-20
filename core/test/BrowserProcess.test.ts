@@ -1,5 +1,5 @@
-import { Browser } from '../index';
 import { BrowserUtils, TestLogger, Helpers } from '@unblocked-web/agent-testing/index';
+import { Browser } from '../index';
 
 afterEach(Helpers.afterEach);
 beforeEach(async () => {

@@ -121,6 +121,7 @@ export default class SocketPool {
     const entry = { mitmSocket, client };
     this.http2Sessions.push(entry);
     this.events.on(client, 'close', () => this.closeHttp2Session(entry));
+    this.events.on(mitmSocket, 'close', () => this.closeHttp2Session(entry));
     this.events.on(client, 'goaway', () => this.closeHttp2Session(entry));
   }
 
@@ -133,7 +134,7 @@ export default class SocketPool {
       this.pooled -= 1;
     }
 
-    if (this.session.isClosing || socket.isWebsocket) return;
+    if (this.session.isClosing || socket.isWebsocket || socket.isHttp2()) return;
 
     if (this.pooled < this.maxConnections) this.pending.shift()?.resolve();
   }

@@ -3,8 +3,6 @@ import IExecJsPathResult from '@unblocked-web/specifications/agent/browser/IExec
 import TypeSerializer from '@ulixee/commons/lib/TypeSerializer';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import IPoint from '@unblocked-web/specifications/agent/browser/IPoint';
-import Frame from './Frame';
-import InjectedScriptError from '../errors/InjectedScriptError';
 import { isMousePositionXY } from '@unblocked-web/specifications/agent/interact/IInteractions';
 import IJsPathFunctions, {
   getClientRectFnName,
@@ -12,8 +10,10 @@ import IJsPathFunctions, {
   getNodePointerFnName,
   getNodeIdFnName,
 } from '@unblocked-web/specifications/agent/browser/IJsPathFunctions';
-import InjectedScripts from './InjectedScripts';
 import { LoadStatus } from '@unblocked-web/specifications/agent/browser/Location';
+import Frame from './Frame';
+import InjectedScriptError from '../errors/InjectedScriptError';
+import InjectedScripts from './InjectedScripts';
 
 interface IJsPathSource {
   parentNodeId?: number;
@@ -204,6 +204,7 @@ export class JsPath implements IJsPathFunctions {
     }[] = [];
 
     let sourcePath: IJsPathSource;
+    // eslint-disable-next-line no-cond-assign
     while ((sourcePath = this.nodeIdToJsPathSource.get(nodeId))) {
       paths.unshift({ nodeId, jsPath: sourcePath.jsPath });
       nodeId = sourcePath.parentNodeId;

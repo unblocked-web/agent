@@ -1,7 +1,7 @@
-import { Browser, BrowserContext, Page } from '../index';
-import { TestServer } from './server';
 import { TestLogger } from '@unblocked-web/agent-testing';
 import { browserEngineOptions, PageHooks } from '@unblocked-web/agent-testing/browserUtils';
+import { Browser, BrowserContext, Page } from '../index';
+import { TestServer } from './server';
 
 describe('Page.popups', () => {
   let server: TestServer;

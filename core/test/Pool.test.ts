@@ -2,8 +2,8 @@ import Resolvable from '@ulixee/commons/lib/Resolvable';
 import * as http from 'http';
 import { BrowserUtils, Helpers, TestLogger } from '@unblocked-web/agent-testing';
 import { ITestHttpServer } from '@unblocked-web/agent-testing/helpers';
-import { Pool } from '../index';
 import IBrowserEngine from '@unblocked-web/specifications/agent/browser/IBrowserEngine';
+import { Pool } from '../index';
 
 let httpServer: ITestHttpServer<http.Server>;
 
