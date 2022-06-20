@@ -124,7 +124,7 @@ class ObjectAtPath {
     const centerX = round(x + width / 2);
     const centerY = round(y + height / 2);
 
-    this._obstructedByElement = document.elementFromPoint(centerX, centerY);
+    this._obstructedByElement = ObjectAtPath.elementFromPoint(centerX, centerY);
     return this._obstructedByElement;
   }
 
@@ -391,6 +391,21 @@ class ObjectAtPath {
     }
 
     return state;
+  }
+
+  public static elementFromPoint(x: number, y: number): Element {
+    let container: Document | ShadowRoot = document;
+    let element: Element;
+    while (container) {
+      // elementFromPoint works incorrectly in Chromium (http://crbug.com/1188919),
+      // so we use elementsFromPoint instead.
+      const elements: Element[] = container.elementsFromPoint(x, y);
+      const innerElement = elements[0];
+      if (!innerElement || element === innerElement) break;
+      element = innerElement;
+      container = element.shadowRoot;
+    }
+    return element;
   }
 }
 
