@@ -17,7 +17,6 @@ import { IUnblockedPluginClass } from '@unblocked-web/specifications/plugin/IUnb
 import Browser from './Browser';
 import Agent, { IAgentCreateOptions } from './Agent';
 import env from '../env';
-import DevtoolsPreferences from './DevtoolsPreferences';
 
 const { log } = Log(module);
 
@@ -140,11 +139,6 @@ export default class Pool extends TypedEventEmitter<{
 
       this.events.on(browser, 'new-context', this.watchForContextPagesClosed.bind(this));
       this.events.once(browser, 'close', this.onBrowserClosed.bind(this, browser.id));
-
-      if (browser.engine.isHeaded) {
-        const preferencesInterceptor = new DevtoolsPreferences(browser.engine);
-        browser.hooks.onDevtoolsPanelAttached = preferencesInterceptor.installOnConnect;
-      }
 
       await browser.launch();
       this.emit('browser-launched', { browser });

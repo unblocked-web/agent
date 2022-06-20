@@ -427,13 +427,13 @@ export default class Interactor implements IInteractionsHelper {
 
     if (isMousePositionXY(interactionStep.mousePosition)) {
       return [rect.x, rect.y];
-    } 
-      const point = await rectUtils.createPointInRect(rect, {
-        paddingPercent: { height: 10, width: 10 },
-        constrainToViewport: constrainToViewport ? this.viewportSize : undefined,
-      });
-      return [point.x, point.y];
-    
+    }
+
+    const point = await rectUtils.createPointInRect(rect, {
+      paddingPercent: { height: 10, width: 10 },
+      constrainToViewport: constrainToViewport ? this.viewportSize : undefined,
+    });
+    return [point.x, point.y];
   }
 
   private async injectScrollToPositions(

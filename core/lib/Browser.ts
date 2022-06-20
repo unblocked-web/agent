@@ -16,6 +16,7 @@ import BrowserProcess from './BrowserProcess';
 import BrowserLaunchError from '../errors/BrowserLaunchError';
 import env from '../env';
 import GetVersionResponse = Protocol.Browser.GetVersionResponse;
+import DevtoolsPreferences from './DevtoolsPreferences';
 
 const { log } = Log(module);
 
@@ -55,6 +56,7 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
   private process: BrowserProcess;
 
   private version: GetVersionResponse;
+  private preferencesInterceptor?: DevtoolsPreferences;
 
   private get defaultBrowserContext(): BrowserContext {
     return this.browserContextsById.get(undefined);
@@ -76,6 +78,7 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
       this.hooks = hooks;
       hooks.onNewBrowser?.(this, launchArgs);
     }
+    if (this.engine.isHeaded) this.preferencesInterceptor = new DevtoolsPreferences(this.engine);
   }
 
   public async launch(): Promise<Browser> {
@@ -303,6 +306,8 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
     if (targetInfo.type === 'other' && targetInfo.url.startsWith('devtools://devtools')) {
       const devtoolsSession = this.connection.getSession(sessionId);
       const context = this.getBrowserContext(targetInfo.browserContextId);
+
+      this.preferencesInterceptor?.installOnConnect(devtoolsSession).catch(() => null);
       void this.hooks?.onDevtoolsPanelAttached?.(devtoolsSession).catch(() => null);
       context?.onDevtoolsPanelAttached(devtoolsSession, targetInfo);
       return;
