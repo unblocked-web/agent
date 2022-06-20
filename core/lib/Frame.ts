@@ -1,4 +1,8 @@
-import { IFrame, IFrameEvents, ILifecycleEvents } from '@unblocked-web/specifications/agent/browser/IFrame';
+import {
+  IFrame,
+  IFrameEvents,
+  ILifecycleEvents,
+} from '@unblocked-web/specifications/agent/browser/IFrame';
 import { URL } from 'url';
 import Protocol from 'devtools-protocol';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
@@ -130,7 +134,7 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
   ) {
     super();
     const idTracker = framesManager.page.browserContext.idTracker;
-    idTracker.frameId += 1
+    idTracker.frameId += 1;
     this.frameId = idTracker.frameId;
     this.#framesManager = framesManager;
     this.activeContextIds = activeContextIds;
@@ -591,6 +595,12 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
   public onLifecycleEvent(name: string, timestamp?: number, pageLoaderId?: string): void {
     const loaderId = pageLoaderId ?? this.activeLoaderId;
     if (name === 'init' && pageLoaderId) {
+      if (loaderId && this.defaultLoaderId && loaderId !== this.defaultLoaderId) {
+        const defaultLoader = this.navigationLoadersById[this.defaultLoaderId];
+        if (!defaultLoader.isNavigationComplete) {
+          defaultLoader.navigationResolver.resolve(DEFAULT_PAGE);
+        }
+      }
       // if the active loader never initiates before this new one, we should notify
       if (
         this.activeLoaderId &&

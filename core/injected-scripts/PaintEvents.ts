@@ -30,6 +30,9 @@ class PaintEvents {
         contentStableObserver.disconnect();
       });
       contentStableObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+    } else {
+      this.eventTriggered('FirstContentfulPaint');
+      this.eventTriggered('LargestContentfulPaint');
     }
   }
 

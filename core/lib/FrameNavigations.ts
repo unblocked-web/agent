@@ -167,6 +167,7 @@ export default class FrameNavigations
         isStillSameHttpPage = nextTop.requestedUrl.startsWith(baseUrl);
       }
       if (!isStillSameHttpPage) {
+        nextTop.documentNavigationId = null;
         this.lastHttpNavigationRequest = nextTop;
       }
     }
@@ -192,7 +193,6 @@ export default class FrameNavigations
     browserRequestId: string,
     loaderId: string,
   ): void {
-    if (url === 'about:blank') return;
     // if this is a redirect, capture in top
     if (!this.top) return;
 
@@ -272,8 +272,6 @@ export default class FrameNavigations
     loaderId: string,
     responseTime: number,
   ): void {
-    if (url === 'about:blank') return;
-
     const navigation = this.findMatchingNavigation(loaderId);
     if (!navigation) {
     }
@@ -329,7 +327,6 @@ export default class FrameNavigations
     loaderId: string,
     statusChangeDate?: number,
   ): void {
-    if (url === 'about:blank') return;
     // if this is a painting stable, it won't come from a loader event for the page
     if (!loaderId) {
       loaderId = this.findMostRecentHistory(

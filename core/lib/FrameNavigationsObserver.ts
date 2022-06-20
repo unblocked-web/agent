@@ -67,11 +67,7 @@ export default class FrameNavigationsObserver {
     status: ILoadStatus,
     options: IWaitForOptions & { doNotIncrementMarker?: boolean } = {},
   ): Promise<INavigation> {
-    if (
-      !this.navigations.top &&
-      this.navigations.frame.isDefaultUrl &&
-      !this.navigations.frame.parentId
-    ) {
+    if (!this.navigations.top && this.navigations.frame.isDefaultUrl) {
       await this.navigations.frame.waitForDefaultLoader();
       return;
     }
