@@ -139,7 +139,7 @@ class ObjectAtPath {
     if (!overlapping) return false;
 
     // adjust coordinates to get more accurate results
-    const isContained = this.closestElement.contains(overlapping);
+    const isContained = this.closestElement.contains(overlapping) || this.closestElement === overlapping;
     if (isContained) return false;
 
     // make sure overlapping element is visible
@@ -399,7 +399,7 @@ class ObjectAtPath {
     while (container) {
       // elementFromPoint works incorrectly in Chromium (http://crbug.com/1188919),
       // so we use elementsFromPoint instead.
-      const elements: Element[] = container.elementsFromPoint(x, y);
+      const elements = container.elementsFromPoint(x, y);
       const innerElement = elements[0];
       if (!innerElement || element === innerElement) break;
       element = innerElement;

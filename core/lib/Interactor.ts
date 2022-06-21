@@ -75,6 +75,11 @@ export default class Interactor implements IInteractionsHelper {
     isMouseCommand: boolean,
   ) => Promise<void>;
 
+  public afterEachInteractionStep: (
+    interactionStep: IInteractionStep,
+    startTime: number,
+  ) => Promise<void>;
+
   public afterInteractionGroups: () => Promise<void>;
 
   public logger: IBoundLog;
@@ -263,6 +268,7 @@ export default class Interactor implements IInteractionsHelper {
       this.logger.warn('Canceling interaction due to external event');
       throw new CanceledPromiseError('Canceling interaction due to external event');
     }
+    const startTime = Date.now();
     await this.beforeEachInteractionStep?.(
       interactionStep,
       mouseCommands.has(interactionStep.command),
@@ -395,6 +401,7 @@ export default class Interactor implements IInteractionsHelper {
         break;
       }
     }
+    await this.afterEachInteractionStep?.(interactionStep, startTime);
   }
 
   private async getWindowOffset(): Promise<IWindowOffset> {

@@ -2,7 +2,7 @@ import Protocol from 'devtools-protocol';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import IRegisteredEventListener from '@ulixee/commons/interfaces/IRegisteredEventListener';
-import { IFrameManagerEvents } from '@unblocked-web/specifications/agent/browser/IFrame';
+import { IFrame, IFrameManagerEvents } from '@unblocked-web/specifications/agent/browser/IFrame';
 import { bindFunctions } from '@ulixee/commons/lib/utils';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
@@ -32,6 +32,7 @@ export const ISOLATED_WORLD = '__agent_world__';
 
 export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents> {
   public readonly framesById = new Map<string, Frame>();
+  public readonly framesByFrameId = new Map<number, Frame>();
   public readonly page: Page;
   public readonly pendingNewDocumentScripts: { script: string; isolated: boolean }[] = [];
 
@@ -144,7 +145,7 @@ export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents
 
   public async addPageCallback(
     name: string,
-    onCallback: (payload: string, frameId: string) => any,
+    onCallback: (payload: string, frame: IFrame) => any,
     isolateFromWebPageEnvironment?: boolean,
   ): Promise<IRegisteredEventListener> {
     const params: Protocol.Runtime.AddBindingRequest = {
@@ -158,8 +159,8 @@ export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents
     return this.events.on(this.devtoolsSession, 'Runtime.bindingCalled', async event => {
       if (event.name === name) {
         await this.isReady;
-        const frameId = this.getFrameIdForExecutionContext(event.executionContextId);
-        onCallback(event.payload, frameId);
+        const frame = this.getFrameForExecutionContext(event.executionContextId);
+        onCallback(event.payload, frame);
       }
     });
   }
@@ -218,6 +219,7 @@ export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents
     for (const [id, childFrame] of this.framesById) {
       if (id !== this.mainFrameId && !this.attachedFrameIds.has(id)) {
         this.framesById.delete(id);
+        this.framesByFrameId.delete(childFrame.frameId);
         try {
           childFrame.close();
         } catch (error) {
@@ -262,9 +264,9 @@ export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents
     await frame.waitForNavigationLoader(loaderId);
   }
 
-  public getFrameIdForExecutionContext(executionContextId: number): string | undefined {
+  public getFrameForExecutionContext(executionContextId: number): Frame | undefined {
     for (const frame of this.framesById.values()) {
-      if (frame.hasContextId(executionContextId)) return frame.id;
+      if (frame.hasContextId(executionContextId)) return frame;
     }
   }
 
@@ -370,12 +372,12 @@ export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents
   }
 
   private onDomPaintEvent(
-    frameId: string,
+    frameId: number,
     paintEvent: { event: IDomPaintEvent; timestamp: number; url: string },
   ): void {
     const { event, timestamp, url } = paintEvent;
     void this.isReady.then(() => {
-      const frame = this.framesById.get(frameId);
+      const frame = this.framesByFrameId.get(frameId);
       frame.navigations.onDomPaintEvent(event, url, timestamp);
       return null;
     });
@@ -414,6 +416,7 @@ export default class FramesManager extends TypedEventEmitter<IFrameManagerEvents
       parentFrame,
     );
     this.framesById.set(id, frame);
+    this.framesByFrameId.set(frame.frameId, frame);
 
     this.emit('frame-created', { frame, loaderId: newFrame.loaderId });
 

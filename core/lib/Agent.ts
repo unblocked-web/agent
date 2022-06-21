@@ -35,6 +35,7 @@ export default class Agent extends TypedEventEmitter<{ close: void }> {
   public browserContext: BrowserContext;
   public readonly mitmRequestSession: RequestSession;
   public readonly logger: IBoundLog;
+  public readonly plugins: Plugins;
 
   public get emulationProfile(): IEmulationProfile {
     return this.plugins.profile;
@@ -45,7 +46,6 @@ export default class Agent extends TypedEventEmitter<{ close: void }> {
   }
 
   private isOpen: Resolvable<BrowserContext>;
-  private readonly plugins: Plugins;
   private isClosing: Resolvable<void>;
   private events = new EventSubscriber();
   private readonly enableMitm: boolean = true;
@@ -57,9 +57,9 @@ export default class Agent extends TypedEventEmitter<{ close: void }> {
     if (this.isolatedMitm) {
       // don't use password for an isolated mitm proxy
       return { address: `localhost:${this.isolatedMitm.port}` };
-    } 
+    }
       return { address: null, password: this.id };
-    
+
   }
 
   constructor(private readonly options: IAgentCreateOptions = {}, readonly pool?: Pool) {

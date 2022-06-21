@@ -34,14 +34,14 @@ export default class InjectedScripts {
   public static install(
     framesManager: FramesManager,
     onPaintEvent: (
-      frameId: string,
+      frameId: number,
       event: { url: string; event: IDomPaintEvent; timestamp: number },
     ) => void,
   ): Promise<any> {
     return Promise.all([
       framesManager.addPageCallback(
         pageEventsCallbackName,
-        (payload, frameId) => onPaintEvent(frameId, JSON.parse(payload)),
+        (payload, frame) => onPaintEvent(frame.frameId, JSON.parse(payload)),
         framesManager.page.installJsPathIntoIsolatedContext,
       ),
       framesManager.addNewDocumentScript(
