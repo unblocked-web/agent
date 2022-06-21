@@ -68,7 +68,7 @@ describe('Pages', () => {
 
       const message = await waitForConsole;
       await expect(message.message).toBe('Before called');
-      await expect(message.frameId).toBe(page.mainFrame.id);
+      await expect(message.frameId).toBe(page.mainFrame.frameId);
     });
 
     it('page.close should set the page close state', async () => {
