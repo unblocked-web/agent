@@ -36,6 +36,7 @@ import { IJsPath } from '@unblocked-web/js-path';
 import INavigation from '@unblocked-web/specifications/agent/browser/INavigation';
 import IExecJsPathResult from '@unblocked-web/specifications/agent/browser/IExecJsPathResult';
 import IDialog from '@unblocked-web/specifications/agent/browser/IDialog';
+import { IFrame } from '@unblocked-web/specifications/agent/browser/IFrame';
 import DevtoolsSession from './DevtoolsSession';
 import NetworkManager from './NetworkManager';
 import { Keyboard } from './Keyboard';
@@ -267,18 +268,18 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
 
   addPageCallback(
     name: string,
-    onCallback?: (payload: string, frameId: string) => any,
+    onCallback?: (payload: string, frame: IFrame) => any,
     isolateFromWebPageEnvironment?: boolean,
   ): Promise<IRegisteredEventListener> {
     return this.framesManager.addPageCallback(
       name,
-      (payload, frameId) => {
-        if (onCallback) onCallback(payload, frameId);
+      (payload, frame) => {
+        if (onCallback) onCallback(payload, frame);
 
         this.emit('page-callback-triggered', {
           name,
           payload,
-          frameId,
+          frameId: frame.frameId,
         });
       },
       isolateFromWebPageEnvironment,
@@ -679,21 +680,18 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
 
   private onRuntimeException(msg: ExceptionThrownEvent): void {
     const error = ConsoleMessage.exceptionToError(msg.exceptionDetails);
-    const frameId = this.framesManager.getFrameIdForExecutionContext(
+    const frame = this.framesManager.getFrameForExecutionContext(
       msg.exceptionDetails.executionContextId,
     );
-    this.emit('page-error', {
-      frameId,
-      error,
-    });
+    this.emit('page-error', { frameId: frame?.frameId, error });
   }
 
   private onRuntimeConsole(event: ConsoleAPICalledEvent): void {
     const message = ConsoleMessage.create(this.devtoolsSession, event);
-    const frameId = this.framesManager.getFrameIdForExecutionContext(event.executionContextId);
+    const frame = this.framesManager.getFrameForExecutionContext(event.executionContextId);
 
     this.emit('console', {
-      frameId,
+      frameId: frame?.frameId,
       ...message,
     });
   }

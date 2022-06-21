@@ -24,6 +24,7 @@ import IPoint from '@unblocked-web/specifications/agent/browser/IPoint';
 import IDevtoolsSession from '@unblocked-web/specifications/agent/browser/IDevtoolsSession';
 import ChromeApp from '@ulixee/chrome-app';
 import { IHooksProvider } from '@unblocked-web/specifications/agent/hooks/IHooks';
+import { IFrame } from '@unblocked-web/specifications/agent/browser/IFrame';
 import ChromeEngine from './ChromeEngine';
 import Interactor from './Interactor';
 
@@ -42,6 +43,7 @@ export default class Plugins implements IUnblockedPlugins {
 
   private hooksByName: Record<keyof IUnblockedPlugin, ICallbackFn[]> = {
     configure: [],
+    addDomOverride: [],
     playInteractions: [],
     adjustStartingMousePoint: [],
     onNewBrowser: [],
@@ -102,6 +104,21 @@ export default class Plugins implements IUnblockedPlugins {
         callbackFn(this.profile);
       }
     }
+  }
+
+  public addDomOverride(
+    runOn: 'page' | 'worker',
+    script: string,
+    args: Record<string, any> & { callbackName?: string },
+    callback?: (data: string, frame: IFrame) => any,
+  ): boolean {
+    // delegate to first plugin implementing addDomOverride
+    for (const plugin of this.instances) {
+      if (plugin.addDomOverride?.(runOn, script, args, callback)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // INTERACTIONS
