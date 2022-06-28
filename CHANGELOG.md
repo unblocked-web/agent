@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.5](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2022-06-28)
+
+
+### Bug Fixes
+
+* **core:** allow navigation to about:blank ([d3c4c1b](https://github.com/unblocked-web/agent/commit/d3c4c1b36b9870bbf3b5ff28ab5c72929397985b))
+* **core:** not properly attaching to devtools ([ca655e7](https://github.com/unblocked-web/agent/commit/ca655e7ba7c204372d2b2544f8a3b8dd98ac5b29))
+* **core:** shadow dom clicks not working ([7283528](https://github.com/unblocked-web/agent/commit/7283528b305b772addb9f3e78dd7ef52faa7efa2))
+* don’t reuse http2 socket ([74f5ff8](https://github.com/unblocked-web/agent/commit/74f5ff88b1f5879326fefc83a5c6d727eb5f35a5))
+* test ([6c39728](https://github.com/unblocked-web/agent/commit/6c39728283d4a3b60f48ac367f520adcaa1c21f6))
+* update lint ([70abdc7](https://github.com/unblocked-web/agent/commit/70abdc7ec18975f965ea638dfd0d91fae60257eb))
+
+
+### Features
+
+* **core:** add dom overrides fn ([b6d0243](https://github.com/unblocked-web/agent/commit/b6d0243b0d8eeaa5155c2a6942ad2e3f572c07d7))
+
+
+
+
+
 # [2.0.0-alpha.4](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.3...v2.0.0-alpha.4) (2022-06-10)
 
 **Note:** Version bump only for package @unblocked-web/agent-monorepo

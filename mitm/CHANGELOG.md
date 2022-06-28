@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.5](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2022-06-28)
+
+
+### Bug Fixes
+
+* don’t reuse http2 socket ([74f5ff8](https://github.com/unblocked-web/unblocked/commit/74f5ff88b1f5879326fefc83a5c6d727eb5f35a5))
+* update lint ([70abdc7](https://github.com/unblocked-web/unblocked/commit/70abdc7ec18975f965ea638dfd0d91fae60257eb))
+
+
+### Features
+
+* **core:** add dom overrides fn ([b6d0243](https://github.com/unblocked-web/unblocked/commit/b6d0243b0d8eeaa5155c2a6942ad2e3f572c07d7))
+
+
+
+
+
 # [2.0.0-alpha.4](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.3...v2.0.0-alpha.4) (2022-06-10)
 
 **Note:** Version bump only for package @unblocked-web/agent-mitm
