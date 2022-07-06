@@ -669,12 +669,7 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
           // detach from page session
           this.devtoolsSession.send('Target.detachFromTarget', { sessionId }),
         )
-        .catch(error => {
-          this.logger.error('Target.detachFromTarget', {
-            error,
-            devtoolsSessionId: sessionId,
-          });
-        });
+        .catch(() => null);
     }
   }
 

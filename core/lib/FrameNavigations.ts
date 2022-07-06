@@ -1,9 +1,16 @@
-import INavigation, { ContentPaint, NavigationStatus } from '@unblocked-web/specifications/agent/browser/INavigation';
+import INavigation, {
+  ContentPaint,
+  NavigationStatus,
+} from '@unblocked-web/specifications/agent/browser/INavigation';
 import { NavigationReason } from '@unblocked-web/specifications/agent/browser/NavigationReason';
 import { createPromise } from '@ulixee/commons/lib/utils';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import { IBoundLog } from '@ulixee/commons/interfaces/ILog';
-import { IDomPaintEvent, ILoadStatus, LoadStatus } from '@unblocked-web/specifications/agent/browser/Location';
+import {
+  IDomPaintEvent,
+  ILoadStatus,
+  LoadStatus,
+} from '@unblocked-web/specifications/agent/browser/Location';
 import {
   IFrameNavigationEvents,
   IFrameNavigations,
@@ -40,6 +47,17 @@ export default class FrameNavigations
     super();
     this.logger = logger.createChild(module);
     this.setEventsToLog(this.logger, ['navigation-requested', 'status-change']);
+  }
+
+  public reset(): void {
+    for (const entry of this.history) {
+      delete this.historyByLoaderId[entry.loaderId];
+      delete this.historyById[entry.id];
+    }
+    this.lastHttpNavigationRequest = null;
+    this.initiatedUserAction = null;
+    this.nextNavigationReason = null;
+    this.history.length = 0;
   }
 
   public get(id: number): INavigation {
