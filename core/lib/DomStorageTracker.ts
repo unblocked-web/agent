@@ -167,7 +167,7 @@ export default class DomStorageTracker extends TypedEventEmitter<IDomStorageEven
       result.push(record);
 
       try {
-        record.frame = this.page.frames.find(x => x.securityOrigin === origin);
+        record.frame = this.page.frames.find(x => x.securityOrigin === origin && x.isAttached);
 
         if (record.frame && !record.databaseNames.length) {
           const { databaseNames } = await this.devtoolsSession.send(
@@ -180,6 +180,7 @@ export default class DomStorageTracker extends TypedEventEmitter<IDomStorageEven
         }
       } catch (err) {
         // can throw if document not found in page
+        record.frame = null;
       }
     }
     return result;
