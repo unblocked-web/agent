@@ -187,6 +187,13 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
           if (this.closedWithError || !this.devtoolsSession.isConnected()) return;
           const contextId = x.isolated ? isolatedContextId : defaultContextId;
 
+          if (!contextId) {
+            this.logger.warn('No valid context found to run newDocumentScript', {
+              isolated: x.isolated,
+            });
+            return;
+          }
+
           return this.devtoolsSession
             .send('Runtime.evaluate', {
               expression: x.script,
@@ -223,6 +230,11 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
     const startOrigin = this.securityOrigin;
     const contextId = await this.waitForActiveContextId(isolateFromWebPageEnvironment);
     try {
+      if (!contextId) {
+        const notFound: any = new Error('Could not find a valid context for this request');
+        notFound.code = ContextNotFoundCode;
+        throw notFound;
+      }
       const result: Protocol.Runtime.EvaluateResponse = await this.devtoolsSession.send(
         'Runtime.evaluate',
         {
@@ -243,22 +255,22 @@ export default class Frame extends TypedEventEmitter<IFrameEvents> implements IF
       if (remote.objectId) this.devtoolsSession.disposeRemoteObject(remote);
       return remote.value as T;
     } catch (err) {
-      let retries = options?.retriesWaitingForLoad ?? 0;
-      // if we had a context id from a blank page, try again
-      if (
-        (!startOrigin || this.url !== startUrl) &&
-        this.getActiveContextId(isolateFromWebPageEnvironment) !== contextId
-      ) {
-        retries += 1;
-      }
       const isNotFoundError =
         err.code === ContextNotFoundCode ||
         (err as ProtocolError).remoteError?.code === ContextNotFoundCode;
       if (isNotFoundError) {
+        const activeContextId = this.getActiveContextId(isolateFromWebPageEnvironment);
+        const didNavigate = !startOrigin || this.url !== startUrl;
+
+        let retries = options?.retriesWaitingForLoad ?? 0;
+        // if we had a context id from a blank page, try again
+        if (didNavigate && activeContextId && activeContextId !== contextId) {
+          retries += 1;
+        }
         if (retries > 0) {
           // Cannot find context with specified id (ie, could be reloading or unloading)
           return this.evaluate(expression, isolateFromWebPageEnvironment, {
-            shouldAwaitExpression: options?.shouldAwaitExpression,
+            ...(options ?? {}),
             retriesWaitingForLoad: retries - 1,
           });
         }
