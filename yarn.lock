@@ -1856,6 +1856,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/better-sqlite3@^7.5.0":
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@types/better-sqlite3/-/better-sqlite3-7.5.0.tgz#c57f42c76153d070f7673fbad0084ee324905be0"
+  integrity sha512-G9ZbMjydW2yj1AgiPlUtdgF3a1qNpLJLudc9ynJCeJByS3XFWpmT9LT+VSHrKHFbxb31CvtYwetLTOvG9zdxdg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/body-parser@*":
   version "1.19.2"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
@@ -2183,6 +2190,17 @@
     https-proxy-agent "^5.0.0"
     progress "^2.0.3"
     tar "^6.1.0"
+
+"@ulixee/commons@2.0.0-alpha.6":
+  version "2.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/@ulixee/commons/-/commons-2.0.0-alpha.6.tgz#378f7f07da20bae43598b06741660e05d1f7e054"
+  integrity sha512-rjioSCAnXujNwvGRF+t64fv2GK+iT3gCkBx/kWHPfivf4HAlsnxf4tXluFIW+tg5mT4kWOfzPO1tK2KC11SEMA==
+  dependencies:
+    bech32 "^2.0.0"
+    devtools-protocol "^0.0.981744"
+    https-proxy-agent "^5.0.0"
+    semver "^7.3.7"
+    source-map-js "^1.0.1"
 
 "@ulixee/repo-tools@^1.0.11":
   version "1.0.11"

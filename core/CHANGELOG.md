@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.6](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.5...v2.0.0-alpha.6) (2022-07-13)
+
+
+### Bug Fixes
+
+* **core:** handle evaluate with no frame context ([c65e066](https://github.com/unblocked-web/unblocked/commit/c65e0664ec1469a790431cbb3c63ea5e1c05e431))
+* remove extraneous logging and nav ([91c641c](https://github.com/unblocked-web/unblocked/commit/91c641c756658fbd8355ea164213657235f43127))
+
+
+
+
+
 # [2.0.0-alpha.5](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.4...v2.0.0-alpha.5) (2022-06-28)
 
 

@@ -85,10 +85,6 @@ jobs:
 #      - name: (TEMP) Install Emulator Spec
 #        run: yarn && yarn build
 #        working-directory: ../specifications
-#
-#      - name: (TEMP) Install Emulator Spec
-#        run: yarn link
-#        working-directory: ../specifications/build
 
       - uses: actions/setup-go@v2
         with:

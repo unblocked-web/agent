@@ -5,7 +5,6 @@
   "description": "The Unblocked Automated Web Browser",
   "scripts": {
     "prepare": "husky install",
-    "bump-version": "ulx-repo-version-bump",
     "build": "yarn tsc && cd build && yarn",
     "build:dist": "shx rm -rf build-dist && tsc -b tsconfig.dist.json && ulx-repo-after-build --dist",
     "build:dist-local": "yarn build:dist && cd build-dist && UBK_MITM_REBUILD_SOCKET=1 yarn",
@@ -19,7 +18,9 @@
     "clean": "tsc -b --clean  tsconfig.json",
     "test:build": "cross-env NODE_ENV=test UBK_DATA_DIR=.data-test jest",
     "test": "yarn tsc && cd build && yarn test:build",
-    "lint": "eslint --cache ./"
+    "lint": "eslint --cache ./",
+    "version:check": "ulx-repo-version-check fix",
+    "version:bump": "ulx-repo-version-bump"
   },
   "repository": "git@github.com:unblocked-web/agent.git",
   "author": "Ulixee",
@@ -59,7 +60,7 @@
       "examples",
       "../specifications/build",
       "../js-path/build",
-      "../../commons/build"
+      "../../shared/build/*"
     ]
   },
   "lint-staged": {
