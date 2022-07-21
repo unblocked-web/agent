@@ -91,12 +91,11 @@ func handleSocket(connectArgs ConnectArgs, sessionArgs SessionArgs, signals *Sig
 	}
 
 	domainConn, connErr := DialOnDomain(connectArgs.SocketPath)
-	defer domainConn.Close()
-
 	if connErr != nil {
 		SendErrorToIpc(id, "ipcConnect", connErr)
 		return
 	}
+	defer domainConn.Close()
 
 	domainSocketPiper := &DomainSocketPiper{
 		client:  domainConn,
