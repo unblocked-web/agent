@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.7](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2022-07-26)
+
+
+### Bug Fixes
+
+* **mitm:** conn segfault in case of dns error ([d02f2af](https://github.com/unblocked-web/agent/commit/d02f2af425966a221e2765de491b2d967f3e41df))
+* yarn.lock ([2cebd69](https://github.com/unblocked-web/agent/commit/2cebd6985d86e830649333f975f68eb1440c9b9f))
+
+
+
+
+
 # [2.0.0-alpha.6](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.5...v2.0.0-alpha.6) (2022-07-13)
 
 
