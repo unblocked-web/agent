@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.7](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2022-07-26)
+
+
+### Bug Fixes
+
+* **mitm:** conn segfault in case of dns error ([d02f2af](https://github.com/unblocked-web/unblocked/commit/d02f2af425966a221e2765de491b2d967f3e41df))
+
+
+
+
+
 # [2.0.0-alpha.6](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.5...v2.0.0-alpha.6) (2022-07-13)
 
 **Note:** Version bump only for package @unblocked-web/agent-mitm-socket
