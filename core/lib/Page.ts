@@ -206,6 +206,7 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
       'Page.javascriptDialogClosed',
       this.onJavascriptDialogClosed.bind(this),
     );
+
     this.events.on(session, 'Page.fileChooserOpened', this.onFileChooserOpened.bind(this));
     this.events.on(session, 'Page.windowOpen', this.onWindowOpen.bind(this));
     this.events.on(session, 'Page.screencastFrame', this.onScreencastFrame.bind(this));
@@ -415,7 +416,7 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
       resolvable,
     );
     await resolvable.promise;
-    return this.devtoolsSession.send('Page.handleJavaScriptDialog', {
+    await this.devtoolsSession.send('Page.handleJavaScriptDialog', {
       accept,
       promptText,
     });
@@ -619,6 +620,8 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
       if (error && error instanceof Error) throw error;
     }
 
+    this.events.on(this.mainFrame, 'frame-navigated', this.onMainFrameNavigated.bind(this));
+
     if (this.opener && this.opener.popupInitializeFn) {
       this.logger.stats('Popup triggered', {
         targetId: this.targetId,
@@ -707,6 +710,14 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
   private onJavascriptDialogClosed(event: JavascriptDialogClosedEvent): void {
     this.activeDialog = null;
     this.emit('dialog-closed', { wasConfirmed: event.result, userInput: event.userInput });
+  }
+
+  private onMainFrameNavigated(event: Frame['EventTypes']['frame-navigated']): void {
+    if (event.navigatedInDocument) return;
+
+    void this.devtoolsSession
+      .send('Page.setInterceptFileChooserDialog', { enabled: true })
+      .catch(() => null);
   }
 
   private onFileChooserOpened(event: FileChooserOpenedEvent): void {
