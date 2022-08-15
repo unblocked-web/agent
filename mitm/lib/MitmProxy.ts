@@ -130,7 +130,7 @@ export default class MitmProxy {
     } catch (err) {
       errors.push(err);
     }
-    this.events.close();
+    this.events.close('error');
 
     if (this.closeCertificateGenerator) this.certificateGenerator.close();
     this.certificateGenerator = null;

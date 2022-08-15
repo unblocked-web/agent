@@ -2175,28 +2175,12 @@
     "@typescript-eslint/types" "5.27.1"
     eslint-visitor-keys "^3.3.0"
 
-"@ulixee/chrome-98-0@^4758.102.4":
-  version "4758.102.4"
-  resolved "https://registry.yarnpkg.com/@ulixee/chrome-98-0/-/chrome-98-0-4758.102.4.tgz#a2192b6ebc1be8a1de371aa847dc8a0c6df83421"
-  integrity sha512-+MXP9pTPBOdkjDtrQNiib0pvXV3S/SZE6uwNfeP2TRNFOiZJX8XjCr9/v7Gj934JGzQGPAV10GMbe3yqaq/0oA==
-  dependencies:
-    "@ulixee/chrome-app" "^1.0.2"
-
-"@ulixee/chrome-98-0@^4758.102.6":
+"@ulixee/chrome-98-0@^4758.102.6", "@ulixee/chrome-98-0@^4758.109.6":
   version "4758.109.6"
   resolved "https://registry.yarnpkg.com/@ulixee/chrome-98-0/-/chrome-98-0-4758.109.6.tgz#d96ab324dbc79ab56df4ec69b04e672e5e2d0d05"
   integrity sha512-jPrzdeuDOurIn403cBBd0Rb5ZmvZ2FD2ejl6R6+lF6NUy7ul48KM87xC+/azgTM6Dlvjr9/Bd6+V3Mm9y4Ew7w==
   dependencies:
     "@ulixee/chrome-app" "^1.0.3"
-
-"@ulixee/chrome-app@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@ulixee/chrome-app/-/chrome-app-1.0.2.tgz#37869b7fef03178332f2d900e7459259d8191e45"
-  integrity sha512-pNwH3PKjgmb0aErXTglGANktryk8PYGjNPLW9iKZLKa6iB6O0+8d2w5u4GPTUmnPbARjqdBiHBgJ+q8TokVfcA==
-  dependencies:
-    https-proxy-agent "^5.0.0"
-    progress "^2.0.3"
-    tar "^6.1.0"
 
 "@ulixee/chrome-app@^1.0.3":
   version "1.0.3"
@@ -2592,6 +2576,11 @@ before-after-hook@^2.2.0:
   resolved "https://registry.yarnpkg.com/before-after-hook/-/before-after-hook-2.2.2.tgz#a6e8ca41028d90ee2c24222f201c90956091613e"
   integrity sha512-3pZEU3NT5BFUo/AD5ERPWOgQOCZITni6iavr5AUw5AUwQjMlI0kzu5btnyD39AF0gUEsDPwJT+oY1ORBJijPjQ==
 
+bignumber.js@^9.0.2:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.0.tgz#8d340146107fe3a6cb8d40699643c302e8773b62"
+  integrity sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A==
+
 binary@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/binary/-/binary-0.3.0.tgz#9f60553bc5ce8c3386f3b553cff47462adecaa79"
@@ -2946,6 +2935,11 @@ commander@^6.2.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
   integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
+
+commander@^9.3.0:
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-9.4.0.tgz#bc4a40918fefe52e22450c111ecd6b7acce6f11c"
+  integrity sha512-sRPT+umqkz90UA8M1yqYfnHlZA7fF6nSphDtxeywPZ49ysjxDQybzk13CL+mXekDRG92skbcqCLVovuCusNmFw==
 
 compare-func@^2.0.0:
   version "2.0.0"
@@ -8164,3 +8158,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zod@^3.17.3:
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.18.0.tgz#2eed58b3cafb8d9a67aa2fee69279702f584f3bc"
+  integrity sha512-gwTm8RfUCe8l9rDwN5r2A17DkAa8Ez4Yl4yXqc5VqeGaXaJahzYYXbTwvhroZi0SNBqTwh/bKm2N0mpCzuw4bA==
