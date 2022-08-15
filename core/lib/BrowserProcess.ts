@@ -6,6 +6,7 @@ import * as Fs from 'fs';
 import IBrowserEngine from '@unblocked-web/specifications/agent/browser/IBrowserEngine';
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import { bindFunctions } from '@ulixee/commons/lib/utils';
+import Resolvable from '@ulixee/commons/lib/Resolvable';
 import { PipeTransport } from './PipeTransport';
 import env from '../env';
 
@@ -13,9 +14,11 @@ const { log } = Log(module);
 
 export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
   public readonly transport: PipeTransport;
-  public hasLaunchError: Promise<Error>;
+
+  public isProcessFunctionalPromise = new Resolvable<boolean>();
   private processKilled = false;
   private readonly launchedProcess: ChildProcess;
+  private launchStderr: string[] = [];
 
   constructor(private browserEngine: IBrowserEngine, private processEnv?: NodeJS.ProcessEnv) {
     super();
@@ -23,8 +26,19 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
     bindFunctions(this);
     this.launchedProcess = this.launch();
     this.bindProcessEvents();
-
     this.transport = new PipeTransport(this.launchedProcess);
+    this.transport.connectedPromise
+      .then(() => this.isProcessFunctionalPromise.resolve(true))
+      .catch(err => setImmediate(this.isProcessFunctionalPromise.reject, err));
+
+    this.isProcessFunctionalPromise.catch(() => {
+      setTimeout(() => {
+        if (this.launchStderr.length) {
+          log.error('ERROR launching browser', { stderr: this.launchStderr.join('\n') } as any);
+        }
+      }, 1e3);
+    });
+
     this.bindCloseHandlers();
   }
 
@@ -43,7 +57,7 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
     const { name, executablePath, launchArguments } = this.browserEngine;
     log.info(`${name}.LaunchProcess`, { sessionId: null, executablePath, launchArguments });
 
-    return childProcess.spawn(executablePath, launchArguments, {
+    const child = childProcess.spawn(executablePath, launchArguments, {
       // On non-windows platforms, `detached: true` makes child process a
       // leader of a new process group, making it possible to kill child
       // process tree with `.kill(-pid)` command. @see
@@ -52,22 +66,15 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
       env: this.processEnv,
       stdio: ['ignore', 'pipe', 'pipe', 'pipe', 'pipe'],
     });
+    child.on('error', e => {
+      this.isProcessFunctionalPromise.reject(new Error(`Failed to launch browser: ${e}`));
+    });
+    return child;
   }
 
   private bindProcessEvents(): void {
-    // Prevent Unhandled 'error' event.
-    let error: Error;
-    this.launchedProcess.on('error', e => {
-      error = e;
-    });
-    if (!this.launchedProcess.pid) {
-      this.hasLaunchError = new Promise<Error>(resolve => {
-        if (error) return resolve(error);
-        this.launchedProcess.once('error', err => {
-          resolve(new Error(`Failed to launch browser: ${err}`));
-        });
-      });
-    }
+    if (!this.launchedProcess.pid) return;
+
     const { stdout, stderr } = this.launchedProcess;
     const name = this.browserEngine.name;
 
@@ -75,7 +82,14 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
       if (line) log.stats(`${name}.stdout`, { message: line, sessionId: null });
     });
     readline.createInterface({ input: stderr }).on('line', line => {
-      if (line) log.warn(`${name}.stderr`, { message: line, sessionId: null });
+      if (!line) return;
+      if (
+        !this.isProcessFunctionalPromise.isResolved ||
+        this.isProcessFunctionalPromise.resolved !== true
+      ) {
+        this.launchStderr.push(line);
+      }
+      log.warn(`${name}.stderr`, { message: line, sessionId: null });
     });
 
     this.launchedProcess.once('exit', this.onChildProcessExit);
@@ -114,6 +128,9 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
   private onChildProcessExit(exitCode: number, signal: NodeJS.Signals): void {
     if (this.processKilled) return;
     this.processKilled = true;
+    if (!this.isProcessFunctionalPromise.isResolved) {
+      this.isProcessFunctionalPromise.reject(new Error(`Browser exited prematurely (${signal})`));
+    }
 
     try {
       this.transport?.close();

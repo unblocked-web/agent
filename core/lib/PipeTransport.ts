@@ -16,6 +16,7 @@
 import EventSubscriber from '@ulixee/commons/lib/EventSubscriber';
 import Log from '@ulixee/commons/lib/Logger';
 import { ChildProcess } from 'child_process';
+import Resolvable from '@ulixee/commons/lib/Resolvable';
 import IConnectionTransport from '../interfaces/IConnectionTransport';
 
 const { log } = Log(module);
@@ -25,6 +26,7 @@ export class PipeTransport implements IConnectionTransport {
   pendingMessage: string;
   events = new EventSubscriber();
   isClosed = false;
+  connectedPromise = new Resolvable<void>();
 
   public onMessageFn: (message: string) => void;
   public readonly onCloseFns: (() => void)[] = [];
@@ -32,24 +34,37 @@ export class PipeTransport implements IConnectionTransport {
   constructor(childProcess: ChildProcess) {
     const { 3: pipeWrite, 4: pipeRead } = childProcess.stdio;
     this.pipeWrite = pipeWrite as NodeJS.WritableStream;
-    this.pipeWrite.on('error', error => {
-      if (this.isClosed) return;
-      log.error('PipeTransport.WriteError', { error, sessionId: null });
-    });
     this.pendingMessage = '';
     this.events.on(pipeRead, 'data', this.onData.bind(this));
     this.events.on(pipeRead, 'close', this.onReadClosed.bind(this));
-    this.events.on(pipeRead, 'error', error =>
-      log.error('PipeTransport.ReadError', { error, sessionId: null }),
-    );
-    this.events.on(pipeWrite, 'error', error =>
-      log.error('PipeTransport.WriteError', { error, sessionId: null }),
-    );
+    this.events.on(pipeRead, 'error', error => {
+      if (error.code === 'EPIPE') {
+        error.stack = `Could not read connection with Browser Process: ${error.message}`;
+      }
+      log.error('PipeTransport.ReadError', { error, sessionId: null });
+    });
+    this.events.on(pipeWrite, 'error', error => {
+      if (error.code === 'EPIPE') {
+        error.stack = `Could not write to connection with Browser Process: ${error.message}`;
+      }
+      if (!this.connectedPromise.isResolved) this.connectedPromise.reject(error);
+      if (this.isClosed) return;
+      if (error.code !== 'EPIPE') {
+        log.error('PipeTransport.WriteError', { error, sessionId: null });
+      }
+    });
   }
 
   send(message: string): boolean {
     if (!this.isClosed) {
-      this.pipeWrite.write(`${message}\0`);
+      this.pipeWrite.write(`${message}\0`, error => {
+        if (this.connectedPromise.isResolved) return;
+        if (error) {
+          this.connectedPromise.reject(error);
+        } else {
+          this.connectedPromise.resolve();
+        }
+      });
       return true;
     }
     return false;
@@ -58,7 +73,7 @@ export class PipeTransport implements IConnectionTransport {
   close(): void {
     if (this.isClosed) return;
     this.isClosed = true;
-    this.events.close();
+    this.events.close('error');
   }
 
   private emit(message): void {
@@ -72,6 +87,7 @@ export class PipeTransport implements IConnectionTransport {
   }
 
   private onData(buffer: Buffer): void {
+    this.connectedPromise.resolve();
     let end = buffer.indexOf('\0');
     if (end === -1) {
       this.pendingMessage += buffer.toString();

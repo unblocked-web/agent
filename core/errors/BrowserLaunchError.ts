@@ -1,6 +1,8 @@
 export default class BrowserLaunchError extends Error {
   constructor(message: string, stack: string, public isSandboxError: boolean = false) {
     super(message);
+    stack ??= this.stack;
+    if (stack.startsWith('Error: ')) stack = stack.substring('Error: '.length)
     this.stack = stack;
     this.name = 'BrowserLaunchError';
 
@@ -22,6 +24,6 @@ export default class BrowserLaunchError extends Error {
       ].join('\n');
       this.isSandboxError = true;
     }
-    this.stack = `${this.name}: ${this.message}\n${stack}`;
+    this.stack = `${this.name}: ${stack}`;
   }
 }
