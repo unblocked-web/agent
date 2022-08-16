@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.9](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.7...v2.0.0-alpha.9) (2022-08-16)
+
+
+### Features
+
+* **mitm:** cleanup sockets ([abcfc61](https://github.com/unblocked-web/unblocked/commit/abcfc618e66ea5dbc42bf7144216482d11666d10))
+* **mitm:** keep error handlers ([ce45b78](https://github.com/unblocked-web/unblocked/commit/ce45b78e63a977ef1e249c19b2f0efcbe205ed39))
+
+
+
+
+
 # [2.0.0-alpha.8](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.7...v2.0.0-alpha.8) (2022-08-16)
 
 

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.9](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.7...v2.0.0-alpha.9) (2022-08-16)
+
+
+### Bug Fixes
+
+* **mitm:** allow websockets when h2 server ([cca0419](https://github.com/unblocked-web/unblocked/commit/cca0419f65539129d5f5a44e76f2ce4ecdec6b24))
+* **mitm:** intercepted resources blowing up ([4d42863](https://github.com/unblocked-web/unblocked/commit/4d428633580bcfe1822383ec871cea908e330e91))
+
+
+### Features
+
+* **mitm:** cleanup sockets ([abcfc61](https://github.com/unblocked-web/unblocked/commit/abcfc618e66ea5dbc42bf7144216482d11666d10))
+* **mitm:** keep error handlers ([ce45b78](https://github.com/unblocked-web/unblocked/commit/ce45b78e63a977ef1e249c19b2f0efcbe205ed39))
+
+
+
+
+
 # [2.0.0-alpha.8](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.7...v2.0.0-alpha.8) (2022-08-16)
 
 
