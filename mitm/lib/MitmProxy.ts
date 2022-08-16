@@ -81,7 +81,7 @@ export default class MitmProxy {
     this.events.on(this.httpsServer, 'request', this.onHttpRequest.bind(this, true));
     this.events.on(this.httpsServer, 'upgrade', this.onHttpUpgrade.bind(this, true));
 
-    this.http2Server = http2.createSecureServer();
+    this.http2Server = http2.createSecureServer({ allowHTTP1: true });
     this.events.on(this.http2Server, 'session', this.onHttp2Session.bind(this));
     this.events.on(this.http2Server, 'sessionError', this.onClientError.bind(this, true));
     this.events.on(this.http2Server, 'request', this.onHttpRequest.bind(this, true));
