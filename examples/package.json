@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.0.0-alpha.7",
   "dependencies": {
-    "@ulixee/chrome-98-0": "^4758.102.4",
+    "@ulixee/chrome-98-0": "^4758.102.6",
     "@unblocked-web/agent": "2.0.0-alpha.7"
   }
 }
