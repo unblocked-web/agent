@@ -2175,21 +2175,21 @@
     "@typescript-eslint/types" "5.27.1"
     eslint-visitor-keys "^3.3.0"
 
-"@ulixee/chrome-98-0@^4758.102.4":
-  version "4758.102.4"
-  resolved "https://registry.yarnpkg.com/@ulixee/chrome-98-0/-/chrome-98-0-4758.102.4.tgz#a2192b6ebc1be8a1de371aa847dc8a0c6df83421"
-  integrity sha512-+MXP9pTPBOdkjDtrQNiib0pvXV3S/SZE6uwNfeP2TRNFOiZJX8XjCr9/v7Gj934JGzQGPAV10GMbe3yqaq/0oA==
+"@ulixee/chrome-98-0@^4758.102.6", "@ulixee/chrome-98-0@^4758.109.6":
+  version "4758.109.6"
+  resolved "https://registry.yarnpkg.com/@ulixee/chrome-98-0/-/chrome-98-0-4758.109.6.tgz#d96ab324dbc79ab56df4ec69b04e672e5e2d0d05"
+  integrity sha512-jPrzdeuDOurIn403cBBd0Rb5ZmvZ2FD2ejl6R6+lF6NUy7ul48KM87xC+/azgTM6Dlvjr9/Bd6+V3Mm9y4Ew7w==
   dependencies:
-    "@ulixee/chrome-app" "^1.0.2"
+    "@ulixee/chrome-app" "^1.0.3"
 
-"@ulixee/chrome-app@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@ulixee/chrome-app/-/chrome-app-1.0.2.tgz#37869b7fef03178332f2d900e7459259d8191e45"
-  integrity sha512-pNwH3PKjgmb0aErXTglGANktryk8PYGjNPLW9iKZLKa6iB6O0+8d2w5u4GPTUmnPbARjqdBiHBgJ+q8TokVfcA==
+"@ulixee/chrome-app@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@ulixee/chrome-app/-/chrome-app-1.0.3.tgz#259761fc324a33a4235a2439b005c16b5d8b2a1a"
+  integrity sha512-VhotXRa364M2aym8urvEJ0e1o55dV4gWttAVb0M20xWjpUCIpyBfvO6mz69J40+K/SAVa6ne9mXkiFBFz6g/8g==
   dependencies:
     https-proxy-agent "^5.0.0"
     progress "^2.0.3"
-    tar "^6.1.0"
+    tar "^6.1.11"
 
 "@ulixee/repo-tools@^1.0.11":
   version "1.0.11"
@@ -2577,9 +2577,9 @@ before-after-hook@^2.2.0:
   integrity sha512-3pZEU3NT5BFUo/AD5ERPWOgQOCZITni6iavr5AUw5AUwQjMlI0kzu5btnyD39AF0gUEsDPwJT+oY1ORBJijPjQ==
 
 bignumber.js@^9.0.2:
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.2.tgz#71c6c6bed38de64e24a65ebe16cfcf23ae693673"
-  integrity sha512-GAcQvbpsM0pUb0zw1EI0KhQEZ+lRwR5fYaAp3vPOYuP7aDvGy6cVN6XHLauvF8SOga2y0dcLcjt3iQDTSEliyw==
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.0.tgz#8d340146107fe3a6cb8d40699643c302e8773b62"
+  integrity sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A==
 
 binary@^0.3.0:
   version "0.3.0"
@@ -7507,7 +7507,7 @@ tar@^4.4.12:
     safe-buffer "^5.2.1"
     yallist "^3.1.1"
 
-tar@^6.0.2, tar@^6.1.0:
+tar@^6.0.2, tar@^6.1.0, tar@^6.1.11:
   version "6.1.11"
   resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.11.tgz#6760a38f003afa1b2ffd0ffe9e9abbd0eab3d621"
   integrity sha512-an/KZQzQUkZCkuoAA64hM92X0Urb6VpRhAFllDzz44U2mcD5scmT3zBc4VgVpkugF580+DQn8eAFSyoQt0tznA==
@@ -8160,6 +8160,6 @@ yocto-queue@^0.1.0:
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
 zod@^3.17.3:
-  version "3.17.10"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.17.10.tgz#8716a05e6869df6faaa878a44ffe3c79e615defb"
-  integrity sha512-IHXnQYQuOOOL/XgHhgl8YjNxBHi3xX0mVcHmqsvJgcxKkEczPshoWdxqyFwsARpf41E0v9U95WUROqsHHxt0UQ==
+  version "3.18.0"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.18.0.tgz#2eed58b3cafb8d9a67aa2fee69279702f584f3bc"
+  integrity sha512-gwTm8RfUCe8l9rDwN5r2A17DkAa8Ez4Yl4yXqc5VqeGaXaJahzYYXbTwvhroZi0SNBqTwh/bKm2N0mpCzuw4bA==

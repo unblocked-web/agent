@@ -242,7 +242,7 @@ export default class MitmRequestAgent {
       });
     };
 
-    request.once('error', initError);
+    const initErrorRegistration = this.events.once(request, 'error', initError);
 
     let callbackArgs: any[];
     request.once('response', (...args: any[]) => {
@@ -262,7 +262,7 @@ export default class MitmRequestAgent {
         callbackArgs = null;
       }
       // hand off to another fn
-      if (event === 'error') request.off('error', initError);
+      if (event === 'error') this.events.off(initErrorRegistration);
       return request;
     };
     const originalOn = request.on.bind(request);

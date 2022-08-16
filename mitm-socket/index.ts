@@ -117,7 +117,7 @@ export default class MitmSocket
     this.emit('close');
     this.cleanupSocket();
     this.closedPromise.resolve(this.closeTime);
-    this.events.close();
+    this.events.close('error');
     this.removeAllListeners();
     this.logger.stats(`MitmSocket.Closed`, {
       parentLogId,

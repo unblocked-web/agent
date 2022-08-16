@@ -15,8 +15,8 @@ import DevtoolsSession from './DevtoolsSession';
 import BrowserProcess from './BrowserProcess';
 import BrowserLaunchError from '../errors/BrowserLaunchError';
 import env from '../env';
-import GetVersionResponse = Protocol.Browser.GetVersionResponse;
 import DevtoolsPreferences from './DevtoolsPreferences';
+import GetVersionResponse = Protocol.Browser.GetVersionResponse;
 
 const { log } = Log(module);
 
@@ -94,18 +94,22 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
     });
     try {
       this.isLaunchStarted = true;
-      if (this.engine.verifyLaunchable) await this.engine.verifyLaunchable();
+      await this.engine.verifyLaunchable?.();
 
-      const process = new BrowserProcess(this.engine);
-      const hasError = await process.hasLaunchError;
-      if (hasError) throw hasError;
+      this.process = new BrowserProcess(this.engine);
+      this.connection = new Connection(this.process.transport);
+      this.devtoolsSession = this.connection.rootSession;
 
       try {
-        await this.didLaunchProcess(process);
+        await Promise.all([this.testConnection(), this.process.isProcessFunctionalPromise]);
       } catch (error) {
-        await process.close();
+        await this.process.close();
         throw error;
       }
+
+      this.bindDevtoolsEvents();
+      this.process.once('close', () => this.emit('close'));
+
       this.launchPromise.resolve();
       log.stats('Browser.Launched', {
         ...this.version,
@@ -123,6 +127,7 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
         parentLogId,
         sessionId: null,
       });
+      setImmediate(() => this.emit('close'));
       await this.launchPromise.promise;
     }
   }
@@ -206,24 +211,15 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
     return !this.connection.isClosed;
   }
 
-  protected async didLaunchProcess(process: BrowserProcess): Promise<void> {
-    this.process = process;
-    this.process.once('close', () => {
-      this.emit('close');
-      this.removeAllListeners();
-    });
-
-    const connection = new Connection(this.process.transport);
-    this.connection = connection;
-    this.devtoolsSession = connection.rootSession;
-
-    this.connection.once('disconnected', this.emit.bind(this, 'close'));
+  protected bindDevtoolsEvents(): void {
     this.devtoolsSession.on('Target.attachedToTarget', this.onAttachedToTarget.bind(this));
     this.devtoolsSession.on('Target.detachedFromTarget', this.onDetachedFromTarget.bind(this));
     this.devtoolsSession.on('Target.targetCreated', this.onTargetCreated.bind(this));
     this.devtoolsSession.on('Target.targetDestroyed', this.onTargetDestroyed.bind(this));
     this.devtoolsSession.on('Target.targetCrashed', this.onTargetCrashed.bind(this));
+  }
 
+  protected async testConnection(): Promise<void> {
     await this.devtoolsSession.send('Target.setAutoAttach', {
       autoAttach: true,
       waitForDebuggerOnStart: true,
@@ -234,6 +230,8 @@ export default class Browser extends TypedEventEmitter<IBrowserEvents> implement
       discover: true,
     });
     this.version = await this.devtoolsSession.send('Browser.getVersion');
+
+    this.connection.once('disconnected', this.emit.bind(this, 'close'));
   }
 
   private applyDefaultLaunchArgs(options: IBrowserLaunchArgs): void {
