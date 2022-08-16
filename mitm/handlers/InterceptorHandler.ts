@@ -24,6 +24,11 @@ export default class InterceptorHandler {
           ctx.proxyToClientResponse,
         )
       ) {
+        ctx.responseHeaders ??= ctx.proxyToClientResponse.getHeaders() as any;
+        ctx.responseTime ??= Date.now();
+        ctx.status ??= ctx.proxyToClientResponse.statusCode;
+        ctx.statusMessage ??= ctx.proxyToClientResponse.statusMessage;
+        ctx.didInterceptResource = true;
         return true;
       }
 

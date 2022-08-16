@@ -132,7 +132,7 @@ export default class MitmRequestAgent {
     }
     this.socketPoolByOrigin.clear();
     this.socketPoolByResolvedHost.clear();
-    this.events.close();
+    this.events.close('error');
     this.session = null;
   }
 
@@ -231,18 +231,18 @@ export default class MitmRequestAgent {
       agent: null,
     });
 
-    const initError = (error): void => {
-      if (error.code === 'ECONNRESET') {
-        didHaveFlushErrors = true;
-        return;
-      }
+    this.events.on(request, 'error', error => {
       this.logger.info(`MitmHttpRequest.Http1SendRequestError`, {
         request: requestSettings,
         error,
       });
-    };
+    });
 
-    const initErrorRegistration = this.events.once(request, 'error', initError);
+    const flushListener = this.events.once(request, 'error', error => {
+      if (error.code === 'ECONNRESET') {
+        didHaveFlushErrors = true;
+      }
+    });
 
     let callbackArgs: any[];
     request.once('response', (...args: any[]) => {
@@ -262,7 +262,7 @@ export default class MitmRequestAgent {
         callbackArgs = null;
       }
       // hand off to another fn
-      if (event === 'error') this.events.off(initErrorRegistration);
+      if (event === 'error') this.events.off(flushListener);
       return request;
     };
     const originalOn = request.on.bind(request);
