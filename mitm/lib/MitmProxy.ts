@@ -111,22 +111,27 @@ export default class MitmProxy {
     }
     this.secureContexts = {};
     try {
-      this.httpServer.close();
+      this.httpServer.unref().close();
     } catch (err) {
       errors.push(err);
     }
 
     try {
       for (const session of this.http2Sessions) {
+        session.socket.unref().destroy();
         session.destroy();
       }
-      this.http2Sessions.clear();
-      this.http2Server.close();
     } catch (err) {
       errors.push(err);
     }
     try {
-      this.httpsServer.close();
+      this.http2Sessions.clear();
+      this.http2Server.unref().close();
+    } catch (err) {
+      errors.push(err);
+    }
+    try {
+      this.httpsServer.unref().close();
     } catch (err) {
       errors.push(err);
     }
@@ -175,7 +180,7 @@ export default class MitmProxy {
 
     // don't listen for errors until server already started
     this.events.on(this.httpServer, 'error', this.onGenericHttpError.bind(this, false));
-    this.events.on(this.httpsServer, 'error', this.onGenericHttpError.bind(this, true));
+    this.events.on(this.httpsServer, 'error', this.onGenericHttpError.bind(this, false));
     this.events.on(this.http2Server, 'error', this.onGenericHttpError.bind(this, true));
 
     return this;
@@ -514,7 +519,7 @@ export default class MitmProxy {
 
 function destroyConnection(socket: net.Socket): void {
   try {
-    socket.destroy();
+    socket.unref().destroy();
   } catch (e) {
     // nothing to do
   }

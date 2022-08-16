@@ -356,6 +356,8 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
     };
     this.browserContext.commandMarker.incrementMark?.('goBack');
     await this.navigateToHistory(-1);
+    if (this.mainFrame.isDefaultUrl) return this.mainFrame.url;
+
     await this.mainFrame.waitForLoad({
       loadStatus: options?.waitForLoadStatus ?? LoadStatus.PaintingStable,
       timeoutMs: options?.timeoutMs,
@@ -373,6 +375,8 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
     };
     this.browserContext.commandMarker.incrementMark?.('goForward');
     await this.navigateToHistory(1);
+    if (this.mainFrame.isDefaultUrl) return this.mainFrame.url;
+
     await this.mainFrame.waitForLoad({
       loadStatus: options?.waitForLoadStatus ?? LoadStatus.PaintingStable,
       timeoutMs: options?.timeoutMs,

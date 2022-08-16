@@ -36,6 +36,7 @@ export default class HttpRequestHandler extends BaseHttpHandler {
 
       const proxyToServerRequest = await this.createProxyToServerRequest();
       if (!proxyToServerRequest) {
+        clientToProxyRequest.resume();
         this.cleanup();
         return;
       }

@@ -52,7 +52,7 @@ export default abstract class BaseHttpHandler {
         await context.browserHasRequested;
         session.emit('response', MitmRequestContext.toEmittedResource(this.context));
         // already wrote reply
-        return;
+        return null;
       }
 
       // do one more check on the session before doing a connect

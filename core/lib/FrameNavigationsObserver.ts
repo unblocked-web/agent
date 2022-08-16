@@ -67,17 +67,16 @@ export default class FrameNavigationsObserver {
     status: ILoadStatus,
     options: IWaitForOptions & { doNotIncrementMarker?: boolean } = {},
   ): Promise<INavigation> {
+    assert(LoadStatus[status], `Invalid load status: ${status}`);
     if (!this.navigations.top && this.navigations.frame.isDefaultUrl) {
       await this.navigations.frame.waitForDefaultLoader();
-      return;
+      if (status === LoadStatus.JavascriptReady) return;
     }
 
     if (!options?.doNotIncrementMarker) {
       this.navigations.frame.page.browserContext.commandMarker.incrementMark?.('waitForLoad');
       this.logger.info(`Frame.waitForLoad(${status})`, options);
     }
-
-    assert(LoadStatus[status], `Invalid load status: ${status}`);
 
     const top = this.navigations.top;
     if (top && top.statusChanges.has(status)) return Promise.resolve(top);

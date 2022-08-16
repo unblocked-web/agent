@@ -21,7 +21,10 @@ import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEve
 import MitmSocket from '@unblocked-web/agent-mitm-socket';
 import MitmSocketSession from '@unblocked-web/agent-mitm-socket/lib/MitmSocketSession';
 import MitmEnv from '@unblocked-web/agent-mitm/env'; // eslint-disable-line import/no-extraneous-dependencies
+import Logger from '@ulixee/commons/lib/Logger';
 import { Helpers, TestLogger } from './index';
+
+const { log } = Logger(module);
 
 export const needsClosing: { close: () => Promise<any> | void; onlyCloseOnFinal?: boolean }[] = [];
 
@@ -55,6 +58,7 @@ export async function runKoaServer(onlyCloseOnFinal = true): Promise<ITestKoaSer
   const upload = KoaMulter(); // note you can pass `multer` options here
 
   koa.use(router.routes()).use(router.allowedMethods());
+  koa.on('error', error => log.warn('Koa error', { error } as any));
 
   const server = await new Promise<Server>(resolve => {
     const koaServer = koa
