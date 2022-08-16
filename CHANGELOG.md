@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.8](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.7...v2.0.0-alpha.8) (2022-08-16)
+
+
+### Bug Fixes
+
+* **core:** fileprompt not working after nav ([7e7ad40](https://github.com/unblocked-web/agent/commit/7e7ad401d03e68c9e54f15bf58511be9a65f7eae))
+* **mitm:** allow websockets when h2 server ([cca0419](https://github.com/unblocked-web/agent/commit/cca0419f65539129d5f5a44e76f2ce4ecdec6b24))
+
+
+### Features
+
+* **core:** improve error when browser can’t open ([a4089df](https://github.com/unblocked-web/agent/commit/a4089df616679075cafbc1285c71d5388cf63ed9))
+* **mitm:** keep error handlers ([ce45b78](https://github.com/unblocked-web/agent/commit/ce45b78e63a977ef1e249c19b2f0efcbe205ed39))
+
+
+
+
+
 # [2.0.0-alpha.7](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.6...v2.0.0-alpha.7) (2022-07-26)
 
 
