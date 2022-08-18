@@ -19,6 +19,7 @@ export default {
       .find(x => x.match(/^@ulixee\/chrome-\d+-0$/))
       ?.split('@ulixee/')
       ?.pop(),
+  noRosettaChromeOnMac: booleanOrUndefined(process.env.UBK_NO_CHROME_ROSETTA)
 };
 
 function booleanOrUndefined(envValue): boolean | undefined {

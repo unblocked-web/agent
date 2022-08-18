@@ -7,6 +7,7 @@ import IBrowserEngine from '@unblocked-web/specifications/agent/browser/IBrowser
 import { TypedEventEmitter } from '@ulixee/commons/lib/eventUtils';
 import { bindFunctions } from '@ulixee/commons/lib/utils';
 import Resolvable from '@ulixee/commons/lib/Resolvable';
+import { arch } from 'os';
 import { PipeTransport } from './PipeTransport';
 import env from '../env';
 
@@ -57,7 +58,15 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
     const { name, executablePath, launchArguments } = this.browserEngine;
     log.info(`${name}.LaunchProcess`, { sessionId: null, executablePath, launchArguments });
 
-    const child = childProcess.spawn(executablePath, launchArguments, {
+    let spawnFile = executablePath;
+    if (!env.noRosettaChromeOnMac && process.platform === 'darwin' && arch() === 'arm64') {
+      this.processEnv ??= process.env;
+      this.processEnv.ARCHPREFERENCE = 'x86_64';
+      spawnFile = 'arch'; // we need to launch through arch to force Chrome to use Rosetta
+      launchArguments.unshift(executablePath);
+    }
+
+    const child = childProcess.spawn(spawnFile, launchArguments, {
       // On non-windows platforms, `detached: true` makes child process a
       // leader of a new process group, making it possible to kill child
       // process tree with `.kill(-pid)` command. @see
@@ -129,7 +138,9 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
     if (this.processKilled) return;
     this.processKilled = true;
     if (!this.isProcessFunctionalPromise.isResolved) {
-      this.isProcessFunctionalPromise.reject(new Error(`Browser exited prematurely (${signal})`));
+      this.isProcessFunctionalPromise.reject(
+        new Error(`Browser exited prematurely (${signal ?? 'no signal'})`),
+      );
     }
 
     try {
