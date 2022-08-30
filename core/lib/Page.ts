@@ -773,12 +773,16 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
     const resourceId = this.browserContext.resources.getBrowserRequestLatestResource(
       event.browserRequestId,
     )?.id;
-    this.browserContext.websocketMessages.record({
-      resourceId,
-      message: event.message,
-      isFromServer: event.isFromServer,
-      lastCommandId: this.lastActivityId,
-      timestamp: event.timestamp,
-    });
+    const isMitmEnabled = this.browserContext.resources.hasRegisteredMitm;
+    this.browserContext.websocketMessages.record(
+      {
+        resourceId,
+        message: event.message,
+        isFromServer: event.isFromServer,
+        lastCommandId: this.lastActivityId,
+        timestamp: event.timestamp,
+      },
+      isMitmEnabled,
+    );
   }
 }
