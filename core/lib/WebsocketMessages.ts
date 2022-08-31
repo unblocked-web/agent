@@ -60,14 +60,17 @@ export default class WebsocketMessages extends TypedEventEmitter<{
     if (idx >= 0) listeners.splice(idx, 1);
   }
 
-  public record(event: {
-    resourceId: number;
-    isFromServer: boolean;
-    message: string | Buffer;
-    lastCommandId: number;
-    timestamp: number;
-  }): IWebsocketMessage | undefined {
-    if (!event.resourceId) {
+  public record(
+    event: {
+      resourceId: number;
+      isFromServer: boolean;
+      message: string | Buffer;
+      lastCommandId: number;
+      timestamp: number;
+    },
+    isMitmEnabled: boolean,
+  ): IWebsocketMessage | undefined {
+    if (!event.resourceId && isMitmEnabled) {
       this.logger.error(`CaptureWebsocketMessageError.UnregisteredResource`, {
         event,
       });
