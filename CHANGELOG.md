@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.10](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2022-08-31)
+
+
+### Bug Fixes
+
+* **core:** don’t log no-resource if mitm disabled ([3b168fe](https://github.com/unblocked-web/agent/commit/3b168febb455dc8e6ea5584f5a12b5fb75bc1144))
+* **core:** force x86 chrome on m1 ([630b36d](https://github.com/unblocked-web/agent/commit/630b36dc8ddbc2f508b458030c54bc9330d785ec))
+
+
+
+
+
 # [2.0.0-alpha.9](https://github.com/unblocked-web/agent/compare/v2.0.0-alpha.7...v2.0.0-alpha.9) (2022-08-16)
 
 
