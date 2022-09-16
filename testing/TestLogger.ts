@@ -40,7 +40,7 @@ export default class TestLogger implements ILog {
     return this.log('warn', action, data);
   }
 
-  public error(action: string, data?: ILogData): number {
+  public error(action: string, data?: ILogData | { error: Error }): number {
     return this.log('error', action, data);
   }
 
@@ -52,7 +52,7 @@ export default class TestLogger implements ILog {
     return new TestLogger(this.outPath, module, boundContext);
   }
 
-  protected log(level: ILogEntry['level'], action: string, data?: ILogData): number {
+  protected log(level: ILogEntry['level'], action: string, data?: ILogData | any): number {
     let logData: object;
     let sessionId: string = this.boundContext.sessionId;
     let parentId: number;

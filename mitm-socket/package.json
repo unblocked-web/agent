@@ -13,6 +13,7 @@
     "nanoid": "^3.1.30"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@types/ws": "^7.2.4",
     "@unblocked-web/agent-testing": "2.0.0-alpha.10",
     "proxy": "^1.0.1",
