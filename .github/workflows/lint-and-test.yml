@@ -102,6 +102,8 @@ jobs:
       - name: Copy mitm source
         run: cp -r mitm-socket/go build/mitm-socket/go
 
+      - run: yarn add global cross-env
+
       - name: Build modules
         run: pwd && yarn --network-timeout 1000000
         working-directory: ./build
