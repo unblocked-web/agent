@@ -10,8 +10,8 @@ const pageScripts = {
   PaintEvents: fs.readFileSync(`${__dirname}/../injected-scripts/PaintEvents.js`, 'utf8'),
 };
 
-const pageEventsCallbackName = '__saPagePaintEventListenerCallback';
-export const injectedScript = `(function saInjectedScripts(runtimeFunction) {
+const pageEventsCallbackName = '__ubkPagePaintEventListenerCallback';
+export const injectedScript = `(function ubkInjectedScripts(runtimeFunction) {
 const exports = {}; // workaround for ts adding an exports variable
 ${stringifiedTypeSerializerClass};
 

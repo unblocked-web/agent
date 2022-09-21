@@ -52,17 +52,17 @@ RUN cat /etc/*-release
 # we will automatically install dependencies
 RUN cd /app/agent && yarn \
     && $(npx install-browser-deps) \
-    && groupadd -r sagent && useradd -r -g sagent -G audio,video sagent \
-    && mkdir -p /home/sagent/Downloads \
-    && mkdir -p /home/sagent/.cache \
-    && chown -R sagent:sagent /home/sagent \
-    && chown -R sagent:sagent /app/agent \
-    && mv ~/.cache/agent /home/sagent/.cache/ \
+    && groupadd -r agent && useradd -r -g agent -G audio,video agent \
+    && mkdir -p /home/agent/Downloads \
+    && mkdir -p /home/agent/.cache \
+    && chown -R agent:agent /home/agent \
+    && chown -R agent:agent /app/agent \
+    && mv ~/.cache/agent /home/agent/.cache/ \
     && chmod 777 /tmp \
-    && chmod -R 777 /home/sagent/.cache/agent
+    && chmod -R 777 /home/agent/.cache/agent
 
 # Add below to run as unprivileged user.
-USER sagent
+USER agent
 
 CMD node core/start;
 # To run this docker, please see /tools/docker/docker-run.sh
