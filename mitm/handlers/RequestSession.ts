@@ -74,9 +74,9 @@ export default class RequestSession
   ) {
     super();
     this.logger = logger.createChild(module);
+    if (hooks) this.hook(hooks);
     this.requestAgent = new MitmRequestAgent(this);
     this.dns = new Dns(this);
-    if (hooks) this.hook(hooks);
   }
 
   public hook(hooks: INetworkHooks): void {
