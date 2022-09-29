@@ -542,9 +542,14 @@ export default class Page extends TypedEventEmitter<IPageLevelEvents> implements
         try {
           await this.devtoolsSession.send('Page.close');
         } catch (err) {
-          if (!err.message.includes('Target closed') && !(err instanceof CanceledPromiseError)) {
+          if (
+            !err.message.includes('Not attached to an active page') &&
+            !err.message.includes('Target closed') &&
+            !(err instanceof CanceledPromiseError)
+          ) {
             throw err;
           }
+          this.didClose();
         }
         clearTimeout(timeout);
       } else {

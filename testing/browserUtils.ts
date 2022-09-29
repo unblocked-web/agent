@@ -1,17 +1,16 @@
 import IViewport from '@unblocked-web/specifications/agent/browser/IViewport';
 import Browser from '@unblocked-web/agent/lib/Browser';
+import env from '@unblocked-web/agent/env';
 import ChromeEngine from '@unblocked-web/agent/lib/ChromeEngine';
-import { IBrowserContextHooks, IBrowserHooks } from '@unblocked-web/specifications/agent/hooks/IHooks';
+import {
+  IBrowserContextHooks,
+  IBrowserHooks,
+} from '@unblocked-web/specifications/agent/hooks/IHooks';
 import IBrowser from '@unblocked-web/specifications/agent/browser/IBrowser';
-import DefaultChrome = require('@ulixee/chrome-98-0');
-import env from './env';
 import { Helpers } from './index';
 
-let ChromeApp = DefaultChrome;
-if (env.defaultBrowserId) {
-  // eslint-disable-next-line import/no-dynamic-require
-  ChromeApp = require(`@ulixee/${env.defaultBrowserId}`);
-}
+// eslint-disable-next-line import/no-dynamic-require
+const ChromeApp = require(`@ulixee/${env.defaultChromeId}`);
 
 export const defaultBrowserEngine = new ChromeEngine(new ChromeApp());
 

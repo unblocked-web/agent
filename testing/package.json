@@ -23,7 +23,6 @@
     "@types/koa": "^2.11.3",
     "@types/koa__multer": "^2.0.2",
     "@types/koa__router": "^8.0.2",
-    "@types/node": "^14.17.9",
-    "@ulixee/chrome-98-0": "^4758.109.6"
+    "@types/node": "^14.17.9"
   }
 }

@@ -314,7 +314,7 @@ describe('BrowserContext', () => {
         value: 'John Doe',
         domain: 'localhost',
         path: '/',
-        expires: new Date('1/1/2038').toISOString(),
+        expires: expect.any(String),
         httpOnly: false,
         secure: false,
         sameSite: 'None',
