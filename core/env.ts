@@ -14,12 +14,12 @@ export default {
     envDebug.includes('ubk:devtools'),
   isTest: process.env.NODE_ENV === 'test',
   defaultChromeId:
-    process.env.UBK_DEFAULT_BROWSER_ID ??
+    process.env.UBK_DEFAULT_BROWSER_ID ||
     Object.keys(pkgJson.dependencies)
       .find(x => x.match(/^@ulixee\/chrome-\d+-0$/))
       ?.split('@ulixee/')
       ?.pop(),
-  noRosettaChromeOnMac: booleanOrUndefined(process.env.UBK_NO_CHROME_ROSETTA)
+  noRosettaChromeOnMac: booleanOrUndefined(process.env.UBK_NO_CHROME_ROSETTA),
 };
 
 function booleanOrUndefined(envValue): boolean | undefined {
