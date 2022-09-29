@@ -9,7 +9,7 @@
     "@ulixee/commons": "2.0.0-alpha.11",
     "@unblocked-web/agent-mitm": "2.0.0-alpha.10",
     "@unblocked-web/js-path": "2.0.0-alpha.1",
-    "@unblocked-web/specifications": "2.0.0-alpha.4",
+    "@unblocked-web/specifications": "2.0.0-alpha.5",
     "devtools-protocol": "^0.0.981744",
     "nanoid": "^3.3.3",
     "tough-cookie": "^4.0.0"

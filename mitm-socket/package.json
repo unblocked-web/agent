@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@ulixee/commons": "2.0.0-alpha.11",
-    "@unblocked-web/specifications": "2.0.0-alpha.4",
+    "@unblocked-web/specifications": "2.0.0-alpha.5",
     "nanoid": "^3.1.30"
   },
   "devDependencies": {
