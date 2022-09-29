@@ -52,7 +52,7 @@ jobs:
           retention-days: 1
 
   test:
-    name: Test node-${{ matrix.node-version }}, ${{ matrix.os }}, Chrome ${{matrix.browser || 'latest'}}
+    name: Test node-${{ matrix.node-version }}, ${{ matrix.os }}, ${{matrix.browser || 'latest'}}
     needs: lint
     timeout-minutes: 30
 
