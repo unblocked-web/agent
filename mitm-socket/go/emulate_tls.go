@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"io"
 	"net"
 	"os"
@@ -31,8 +32,10 @@ func EmulateTls(dialConn net.Conn, addr string, sessionArgs SessionArgs, connect
 			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_72)
 		} else if chromeVersion < 95 {
 			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_83)
-		} else {
+		} else if chromeVersion < 98 {
 			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_95)
+		} else {
+			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_98)
 		}
 	} else {
 		// default to chrome83
@@ -51,6 +54,16 @@ func EmulateTls(dialConn net.Conn, addr string, sessionArgs SessionArgs, connect
 			return nil, err
 		}
 		tlsConfig.KeyLogWriter = keylog
+	}
+
+	if connectArgs.ApplicationSettings != nil {
+		tlsConfig.ApplicationSettings = make(map[string][]byte)
+		for k, v := range connectArgs.ApplicationSettings {
+			value, err := base64.StdEncoding.DecodeString(v)
+			if err == nil {
+				tlsConfig.ApplicationSettings[k] = value
+			}
+		}
 	}
 
 	tlsConn := tls.UClient(dialConn, &tlsConfig, tls.HelloCustom)

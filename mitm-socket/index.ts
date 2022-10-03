@@ -27,6 +27,8 @@ export default class MitmSocket
 
   public readonly socketPath: string;
   public alpn = 'http/1.1';
+  public rawApplicationSettings: Buffer;
+  public alps: { settings?: { id: number; value: number }[]; acceptCh: Buffer };
   public socket: net.Socket;
   public dnsResolvedIp: string;
   public remoteAddress: string;
@@ -170,6 +172,19 @@ export default class MitmSocket
       this.connectTime = new Date();
       this.isConnected = true;
       if (message.alpn) this.alpn = message.alpn;
+      if (message.rawApplicationSettings) {
+        // settings are http2 frames
+        this.rawApplicationSettings = Buffer.from(message.rawApplicationSettings, 'base64');
+        this.alps = {
+          acceptCh: message.alps?.AcceptChPayload ? Buffer.from(message.alps.AcceptChPayload, 'base64') : null,
+          settings: message.alps?.Settings?.map(x => {
+            return  {
+              id: x.id,
+              value: x.Val
+            }
+          })
+        };
+      }
       this.remoteAddress = message.remoteAddress;
       this.localAddress = message.localAddress;
       this.emit('connect');

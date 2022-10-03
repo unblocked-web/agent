@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/net/http2"
 	"log"
 	"net"
 	"os"
@@ -84,6 +86,8 @@ func generateCert(config *CertConfig, id int, hostname string) {
 func handleSocket(connectArgs ConnectArgs, sessionArgs SessionArgs, signals *Signals) {
 	var uTlsConn *utls.UConn
 	var protocol string
+	var applicationSettings []byte
+	var alpsFrames AlpsFrames
 
 	id := connectArgs.Id
 	if sessionArgs.Debug {
@@ -122,6 +126,34 @@ func handleSocket(connectArgs ConnectArgs, sessionArgs SessionArgs, signals *Sig
 			return
 		}
 		protocol = uTlsConn.ConnectionState().NegotiatedProtocol
+		applicationSettings = uTlsConn.ConnectionState().PeerApplicationSettings
+		if applicationSettings != nil {
+			buf := new(bytes.Buffer)
+			alps := bytes.NewBuffer(applicationSettings)
+			framer := http2.NewFramer(buf, alps)
+			framer.AllowIllegalReads = true
+			alpsFrames = AlpsFrames{}
+
+			for {
+				frame, err := framer.ReadFrame()
+				if frame == nil || err != nil {
+					break
+				}
+				if unknown, ok := frame.(*http2.UnknownFrame); ok == true {
+					header := frame.Header()
+					if uint8(header.Type) == AcceptChFrameType {
+						alpsFrames.AcceptChPayload = unknown.Payload()
+					}
+				}
+				if settings, ok := frame.(*http2.SettingsFrame); ok == true {
+					alpsFrames.Settings = []http2.Setting{}
+					for i := 0; i < settings.NumSettings(); i++ {
+						alpsFrames.Settings = append(alpsFrames.Settings, settings.Setting(i))
+					}
+				}
+
+			}
+		}
 		tcpConn, ok := dialConn.(*net.TCPConn)
 		if protocol == "h2" && ok {
 			tcpConn.SetNoDelay(true)
@@ -129,9 +161,11 @@ func handleSocket(connectArgs ConnectArgs, sessionArgs SessionArgs, signals *Sig
 	}
 
 	SendToIpc(id, "connected", map[string]interface{}{
-		"alpn":          protocol,
-		"remoteAddress": dialConn.RemoteAddr().String(),
-		"localAddress":  dialConn.LocalAddr().String(),
+		"alpn":                   protocol,
+		"rawApplicationSettings": applicationSettings,
+		"alps":                   alpsFrames,
+		"remoteAddress":          dialConn.RemoteAddr().String(),
+		"localAddress":           dialConn.LocalAddr().String(),
 	})
 
 	if uTlsConn != nil {
@@ -141,17 +175,25 @@ func handleSocket(connectArgs ConnectArgs, sessionArgs SessionArgs, signals *Sig
 	}
 }
 
+var AcceptChFrameType uint8 = 0x89
+
+type AlpsFrames struct {
+	AcceptChPayload []byte
+	Settings        []http2.Setting
+}
+
 type ConnectArgs struct {
-	Id          int
-	SocketPath  string
-	Host        string
-	Port        string
-	IsSsl       bool
-	Servername  string
-	ProxyUrl    string
-	KeepAlive   bool
-	IsWebsocket bool
-	KeylogPath  string
+	Id                  int
+	SocketPath          string
+	Host                string
+	Port                string
+	IsSsl               bool
+	Servername          string
+	ProxyUrl            string
+	KeepAlive           bool
+	IsWebsocket         bool
+	KeylogPath          string
+	ApplicationSettings map[string]string
 }
 
 type SessionArgs struct {

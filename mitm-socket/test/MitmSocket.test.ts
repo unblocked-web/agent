@@ -6,6 +6,7 @@ import * as WebSocket from 'ws';
 import { getTlsConnection, httpGetWithSocket } from '@unblocked-web/agent-testing/helpers';
 import * as https from 'https';
 import { IncomingMessage } from 'http';
+import * as tls from 'tls';
 import MitmSocket from '../index';
 import MitmSocketSession from '../lib/MitmSocketSession';
 
@@ -60,7 +61,7 @@ test('should handle http2 requests', async () => {
 
 test('should be able to hit google using a Chrome Emulator', async () => {
   const socketSession = new MitmSocketSession(TestLogger.forTest(module), {
-    clientHelloId: 'chrome-79',
+    clientHelloId: 'chrome-98',
     rejectUnauthorized: false,
   });
   Helpers.needsClosing.push(socketSession);
@@ -74,6 +75,9 @@ test('should be able to hit google using a Chrome Emulator', async () => {
 
   await tlsConnection.connect(socketSession);
   expect(tlsConnection.alpn).toBe('h2');
+  // this is an encoded application settings set
+  expect(tlsConnection.rawApplicationSettings).toBeTruthy();
+  expect(tlsConnection.alps.acceptCh).toBeTruthy();
 
   const client = http2.connect('https://www.google.com', {
     createConnection: () => tlsConnection.socket,
