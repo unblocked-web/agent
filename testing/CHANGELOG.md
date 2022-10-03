@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.11](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.10...v2.0.0-alpha.11) (2022-10-03)
+
+
+### Bug Fixes
+
+* default chrome not working in tests ([f100624](https://github.com/unblocked-web/unblocked/commit/f100624f272361e330c2e436e1ea77130ba35d07))
+
+
+
+
+
 # [2.0.0-alpha.10](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2022-08-31)
 
 **Note:** Version bump only for package @unblocked-web/agent-testing

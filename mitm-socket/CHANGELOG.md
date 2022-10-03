@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.11](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.10...v2.0.0-alpha.11) (2022-10-03)
+
+
+### Bug Fixes
+
+* lint and test fix attempt 2 ([30eebb7](https://github.com/unblocked-web/unblocked/commit/30eebb778332fd9b890caf17d3e9c8523fa4f198))
+* **mitm:** tls/tcp hooks not called ([cf2e659](https://github.com/unblocked-web/unblocked/commit/cf2e6597400748456487bff15210c67b7498d72d))
+* parse alps settings in TLS connection ([de9f463](https://github.com/unblocked-web/unblocked/commit/de9f463d78a8e563f9cae7f5452c19097c77d558))
+
+
+
+
+
 # [2.0.0-alpha.10](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.9...v2.0.0-alpha.10) (2022-08-31)
 
 **Note:** Version bump only for package @unblocked-web/agent-mitm-socket

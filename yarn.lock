@@ -2198,10 +2198,10 @@
     progress "^2.0.3"
     tar "^6.1.11"
 
-"@ulixee/repo-tools@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@ulixee/repo-tools/-/repo-tools-1.0.17.tgz#f2e48d2030a569750b46e3057b91e9c468860cd4"
-  integrity sha512-D/9zaEgu1N6S9URNzDFqYUY6a4+TMREkP636Dcp8OQ5nc7SwDpuUE2Fg9vEoL0R4dWEkiCVXofJ9wZjCcBnm2g==
+"@ulixee/repo-tools@^1.0.20":
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/@ulixee/repo-tools/-/repo-tools-1.0.20.tgz#7b784eb6295f30dc8865175bc8e2784ae9bca412"
+  integrity sha512-j1dBE5DlwE25YR7G1qHQruY3qygJ/eUK8U/uqYskzFAgtMHFytzvEJX8KbbjHUicSK1g4E0sO0O2NeBwyCJmJg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.27.1"
     "@typescript-eslint/parser" "^5.27.1"
