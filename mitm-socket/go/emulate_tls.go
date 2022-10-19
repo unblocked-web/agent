@@ -38,8 +38,8 @@ func EmulateTls(dialConn net.Conn, addr string, sessionArgs SessionArgs, connect
 			spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_98)
 		}
 	} else {
-		// default to chrome83
-		spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_95)
+		// default to chrome98
+		spec, _ = tls.UtlsIdToSpec(tls.HelloChrome_98)
 	}
 
 	tlsConfig := tls.Config{

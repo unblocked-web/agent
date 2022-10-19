@@ -45,7 +45,7 @@ jobs:
         run: tar -cvf js_files.tar --exclude=node_modules --exclude=dist ./build
 
       - name: Upload built Javascript files
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: js-build
           path: js_files.tar
@@ -95,12 +95,12 @@ jobs:
 #        run: yarn && yarn build
 #        working-directory: ../specifications
 
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version: 1.17
 
       - name: Download built typescript files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: js-build
           path: .
@@ -139,7 +139,7 @@ jobs:
 
       - name: Upload Databases
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-output-${{matrix.os}}-${{ matrix.node-version }}
           path: test-output.tar
