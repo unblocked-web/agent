@@ -7,8 +7,15 @@ import env from './env';
 
 let isDevtoolsLogging = false;
 try {
-  const saEnv = require('@unblocked-web/agent/env');
-  isDevtoolsLogging ||= saEnv.logDevtools;
+  const envDebug = process.env.DEBUG ?? '';
+  if (
+    envDebug.includes('ubk:*') ||
+    envDebug.includes('ubk*') ||
+    envDebug === '*' ||
+    envDebug.includes('devtools')
+  ) {
+    isDevtoolsLogging = true;
+  }
 } catch (e) {}
 
 const logLevels = { stats: 0, info: 1, warn: 2, error: 3 } as const;
@@ -84,7 +91,7 @@ export default class TestLogger implements ILog {
         path: this.module,
         action,
         params,
-      })  }\n`,
+      })}\n`,
     );
     if (logLevels[level] >= logLevels[this.level]) {
       // eslint-disable-next-line no-console

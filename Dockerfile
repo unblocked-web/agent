@@ -23,8 +23,6 @@ RUN echo "deb http://httpredir.debian.org/debian buster main contrib non-free" >
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
-## TODO: randomize font installs and add from google https://gist.github.com/keeferrourke/d29bf364bd292c78cf774a5c37a791db
-
 # Install Go for Mitm sockets
 RUN set -eux; \
 	wget -O go.tgz "${GO_URL}" -q --progress=bar; \
@@ -65,4 +63,4 @@ RUN cd /app/agent && yarn \
 USER agent
 
 CMD node core/start;
-# To run this docker, please see /tools/docker/docker-run.sh
+# To run this docker, please see /tools/docker/run-agent.sh

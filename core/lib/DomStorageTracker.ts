@@ -307,7 +307,7 @@ export default class DomStorageTracker extends TypedEventEmitter<IDomStorageEven
       }
     } catch (error) {
       if (error instanceof CanceledPromiseError) return;
-      this.logger.error('DomStorageTracker.onIndexedDBListUpdated', {
+      this.logger.info('DomStorageTracker.onIndexedDBListUpdated:ERROR', {
         error,
         event,
       });

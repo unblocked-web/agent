@@ -148,10 +148,8 @@ export default class BrowserProcess extends TypedEventEmitter<{ close: void }> {
     } catch (e) {
       // drown
     }
-    if (!env.isTest) {
-      const name = this.browserEngine.name;
-      log.stats(`${name}.ProcessExited`, { exitCode, signal, sessionId: null });
-    }
+
+    log.info(`${this.browserEngine.name}.ProcessExited`, { exitCode, signal, sessionId: null });
 
     this.emit('close');
     this.removeAllListeners();
