@@ -6,11 +6,12 @@ import * as WebSocket from 'ws';
 import * as HttpProxyAgent from 'http-proxy-agent';
 import { Helpers, TestLogger } from '@unblocked-web/agent-testing';
 import { getProxyAgent, runHttpsServer } from '@unblocked-web/agent-testing/helpers';
+import CertificateGenerator from '@unblocked-web/agent-mitm-socket/lib/CertificateGenerator';
 import MitmServer from '../lib/MitmProxy';
 import RequestSession from '../handlers/RequestSession';
 import HeadersHandler from '../handlers/HeadersHandler';
 import MitmRequestAgent from '../lib/MitmRequestAgent';
-import env from '../env';
+import { MitmProxy } from '../index';
 
 const mocks = {
   HeadersHandler: {
@@ -18,7 +19,10 @@ const mocks = {
   },
 };
 
+let certificateGenerator: CertificateGenerator;
+
 beforeAll(() => {
+  certificateGenerator = MitmProxy.createCertificateGenerator();
   mocks.HeadersHandler.determineResourceType.mockImplementation(async () => {
     return {
       resourceType: 'Document',
@@ -255,7 +259,7 @@ test('it should reuse http2 connections', async () => {
 });
 
 async function startMitmServer() {
-  const mitmServer = await MitmServer.start();
+  const mitmServer = await MitmServer.start(certificateGenerator);
   Helpers.onClose(() => mitmServer.close());
   return mitmServer;
 }

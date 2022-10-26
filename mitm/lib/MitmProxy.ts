@@ -60,8 +60,7 @@ export default class MitmProxy {
 
   private isClosing = false;
 
-  private certificateGenerator: ICertificateGenerator;
-  private closeCertificateGenerator = false;
+  private readonly certificateGenerator: ICertificateGenerator;
   private secureContexts: {
     [hostname: string]: Promise<void>;
   } = {};
@@ -136,9 +135,6 @@ export default class MitmProxy {
       errors.push(err);
     }
     this.events.close('error');
-
-    if (this.closeCertificateGenerator) this.certificateGenerator.close();
-    this.certificateGenerator = null;
 
     log.stats('MitmProxy.Closed', {
       sessionId: this.isolatedProxyForSessionId,
@@ -291,7 +287,8 @@ export default class MitmProxy {
     socket: net.Socket,
     head: Buffer,
   ): Promise<void> {
-    if (this.isClosing) return;
+    if (this.isClosing) return this.tryCloseConnectSocket(socket);
+
     const sessionId = this.readSessionId(request.headers, request.socket.remotePort);
     if (!sessionId) {
       return RequestSession.sendNeedsAuth(socket);
@@ -314,48 +311,23 @@ export default class MitmProxy {
 
     // for https we create a new connect back to the https server so we can have the proper cert and see the traffic
     if (MitmProxy.isTlsByte(head)) {
+      proxyToProxyPort = this.httpsPort;
       // URL is in the form 'hostname:port'
       const [hostname, port] = request.url.split(':', 2);
 
-      if (!this.secureContexts[hostname]) {
-        this.secureContexts[hostname] = this.addSecureContext(hostname);
-      }
-
-      let isHttp2 = true;
       try {
-        const requestSession = this.sessionById[sessionId];
-        if (
-          requestSession.bypassAllWithEmptyResponse ||
-          requestSession.shouldInterceptRequest(`https://${hostname}:${port}`) ||
-          requestSession.shouldInterceptRequest(`https://${hostname}`)
-        ) {
-          isHttp2 = false;
-        } else {
-          const agent = requestSession.requestAgent;
-          isHttp2 = await agent.isHostAlpnH2(hostname, port);
+        const [isHttp2] = await Promise.all([
+          this.isHttp2(sessionId, hostname, port),
+          this.addSecureContext(hostname),
+        ]);
+        if (isHttp2) {
+          proxyToProxyPort = this.http2Port;
         }
       } catch (error) {
-        if (error instanceof CanceledPromiseError) return;
-        log.warn('Connect.AlpnLookupError', {
-          hostname,
-          error,
-          sessionId,
-        });
-      }
-
-      try {
-        await this.secureContexts[hostname];
-      } catch (error) {
-        if (error instanceof CanceledPromiseError) return;
-        this.onConnectError(request.url, 'ClientToProxy.GenerateCertError', error);
-        this.serverConnects.delete(socket);
-        return;
-      }
-
-      if (isHttp2) {
-        proxyToProxyPort = this.http2Port;
-      } else {
-        proxyToProxyPort = this.httpsPort;
+        if (!(error instanceof CanceledPromiseError)) {
+          this.onConnectError(request.url, 'ClientToProxy.GenerateCertError', error);
+        }
+        return this.tryCloseConnectSocket(socket);
       }
     }
 
@@ -394,6 +366,31 @@ export default class MitmProxy {
     this.events.once(session, 'close', () => this.http2Sessions.delete(session));
   }
 
+  private async isHttp2(sessionId: string, hostname: string, port: string): Promise<boolean> {
+    try {
+      const requestSession = this.sessionById[sessionId];
+      if (
+        requestSession.bypassAllWithEmptyResponse ||
+        requestSession.shouldInterceptRequest(`https://${hostname}:${port}`) ||
+        requestSession.shouldInterceptRequest(`https://${hostname}`)
+      ) {
+        return false;
+      }
+
+      return await requestSession.requestAgent.isHostAlpnH2(hostname, port);
+    } catch (error) {
+      if (error instanceof CanceledPromiseError) {
+        return false;
+      }
+      log.warn('Connect.AlpnLookupError', {
+        hostname,
+        error,
+        sessionId,
+      });
+    }
+    return false;
+  }
+
   /////// ERROR HANDLING ///////////////////////////////////////////////////////
 
   private onGenericHttpError(isHttp2: boolean, error: Error): void {
@@ -402,6 +399,13 @@ export default class MitmProxy {
       sessionId: this.isolatedProxyForSessionId,
       error,
     });
+  }
+
+  private tryCloseConnectSocket(socket: net.Socket): void {
+    try {
+      // socket.end();
+      this.serverConnects.delete(socket);
+    } catch (err) {}
   }
 
   private onClientError(isHttp2: boolean, error: Error, socket: net.Socket): void {
@@ -459,16 +463,18 @@ export default class MitmProxy {
   }
 
   private async addSecureContext(hostname: string): Promise<void> {
+    if (this.isClosing) return;
     if (hostname.includes(':')) hostname = hostname.split(':').shift();
 
-    if (!this.certificateGenerator) {
-      this.certificateGenerator = MitmProxy.createCertificateGenerator();
-      this.closeCertificateGenerator = true;
-    }
-
-    const cert = await this.certificateGenerator.getCertificate(hostname);
-    this.http2Server.addContext(hostname, cert);
-    this.httpsServer.addContext(hostname, cert);
+    this.secureContexts[hostname] ??= this.certificateGenerator
+      .getCertificate(hostname)
+      .then(cert => {
+        // eslint-disable-next-line promise/always-return
+        if (!cert.cert) return null;
+        this.http2Server.addContext(hostname, cert);
+        this.httpsServer.addContext(hostname, cert);
+      });
+    await this.secureContexts[hostname]
   }
 
   /////// SESSION ID MGMT //////////////////////////////////////////////////////////////////////////////////////////////
@@ -504,7 +510,7 @@ export default class MitmProxy {
     return new CertificateGenerator({ storageDir: sslCaDir });
   }
 
-  public static async start(certificateGenerator?: ICertificateGenerator): Promise<MitmProxy> {
+  public static async start(certificateGenerator: ICertificateGenerator): Promise<MitmProxy> {
     const proxy = new MitmProxy({ certificateGenerator });
 
     await proxy.listen();

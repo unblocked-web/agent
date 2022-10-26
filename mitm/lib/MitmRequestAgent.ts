@@ -24,6 +24,7 @@ import env from '../env';
 
 export default class MitmRequestAgent {
   public static defaultMaxConnectionsPerOrigin = 6;
+  public static connectTimeout = 10e3;
   public socketSession: MitmSocketSession;
   private session: RequestSession;
   private readonly maxConnectionsPerOrigin: number;
@@ -140,7 +141,7 @@ export default class MitmRequestAgent {
     const pool = this.getSocketPoolByOrigin(`${hostname}:${port}`);
 
     const options = { host: hostname, port, isSsl: true, keepAlive: true, servername: hostname };
-    return await pool.isHttp2(false, () => this.createSocketConnection(options));
+    return await pool.isHttp2(false, this.createSocketConnection.bind(this, options));
   }
 
   public async createSocketConnection(options: IHttpSocketConnectOptions): Promise<MitmSocket> {
@@ -191,8 +192,9 @@ export default class MitmRequestAgent {
     )?.match(/close/i);
     options.isWebsocket = ctx.isUpgrade;
 
-    const mitmSocket = await pool.getSocket(options.isWebsocket, () =>
-      this.createSocketConnection(options),
+    const mitmSocket = await pool.getSocket(
+      options.isWebsocket,
+      this.createSocketConnection.bind(this, options),
     );
     MitmRequestContext.assignMitmSocket(ctx, mitmSocket);
     return mitmSocket;
@@ -352,7 +354,6 @@ export default class MitmRequestAgent {
       },
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const binding = new Http2SessionBinding(
       clientToProxyH2Session,
       proxyToServerH2Client,
@@ -378,11 +379,16 @@ export default class MitmRequestAgent {
         this.getSocketPoolByOrigin(svcOrigin).registerHttp2Session(
           proxyToServerH2Client,
           ctx.proxyToServerMitmSocket,
+          binding,
         );
       }
     });
 
-    originSocketPool.registerHttp2Session(proxyToServerH2Client, ctx.proxyToServerMitmSocket);
+    originSocketPool.registerHttp2Session(
+      proxyToServerH2Client,
+      ctx.proxyToServerMitmSocket,
+      binding,
+    );
 
     await connectPromise;
     return proxyToServerH2Client;

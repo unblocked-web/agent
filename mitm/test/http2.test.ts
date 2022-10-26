@@ -5,6 +5,7 @@ import { URL } from 'url';
 import MitmSocket from '@unblocked-web/agent-mitm-socket';
 import IHttpHeaders from '@unblocked-web/specifications/agent/net/IHttpHeaders';
 import MitmSocketSession from '@unblocked-web/agent-mitm-socket/lib/MitmSocketSession';
+import CertificateGenerator from '@unblocked-web/agent-mitm-socket/lib/CertificateGenerator';
 import MitmServer from '../lib/MitmProxy';
 import RequestSession from '../handlers/RequestSession';
 import HttpRequestHandler from '../handlers/HttpRequestHandler';
@@ -13,6 +14,7 @@ import MitmRequestContext from '../lib/MitmRequestContext';
 import { parseRawHeaders } from '../lib/Utils';
 import CacheHandler from '../handlers/CacheHandler';
 import env from '../env';
+import { MitmProxy } from '../index';
 
 const mocks = {
   httpRequestHandler: {
@@ -26,7 +28,10 @@ const mocks = {
   },
 };
 
+let certificateGenerator: CertificateGenerator;
+
 beforeAll(() => {
+  certificateGenerator = MitmProxy.createCertificateGenerator();
   mocks.HeadersHandler.determineResourceType.mockImplementation(async () => {
     return {
       resourceType: 'Document',
@@ -228,7 +233,7 @@ test('should send trailers', async () => {
 
 async function createH2Connection(sessionIdPrefix: string, url: string) {
   const hostUrl = new URL(url);
-  const mitmServer = await MitmServer.start();
+  const mitmServer = await MitmServer.start(certificateGenerator);
   Helpers.onClose(() => mitmServer.close());
 
   const session = createSession(mitmServer, sessionIdPrefix);

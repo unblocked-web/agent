@@ -151,6 +151,7 @@ export default class MitmSocket
     if (!this.server.listening) {
       await new Promise(resolve => this.events.once(this.server, 'listening', resolve));
     }
+    if (session.isClosing || this.isClosing || !session) return;
 
     this.connectPromise = new Resolvable<void>(
       connectTimeoutMillis,
@@ -159,11 +160,16 @@ export default class MitmSocket
       }`,
     );
 
-    await Promise.all([
-      session.requestSocket(this),
-      this.connectPromise.promise,
-      this.socketReadyPromise.promise,
-    ]);
+    try {
+      await Promise.all([
+        session.requestSocket(this),
+        this.connectPromise.promise,
+        this.socketReadyPromise.promise,
+      ]);
+    } catch (error) {
+      if (session.isClosing || this.isClosing) return;
+      throw error;
+    }
   }
 
   public onMessage(message: any): void {
@@ -176,13 +182,15 @@ export default class MitmSocket
         // settings are http2 frames
         this.rawApplicationSettings = Buffer.from(message.rawApplicationSettings, 'base64');
         this.alps = {
-          acceptCh: message.alps?.AcceptChPayload ? Buffer.from(message.alps.AcceptChPayload, 'base64') : null,
+          acceptCh: message.alps?.AcceptChPayload
+            ? Buffer.from(message.alps.AcceptChPayload, 'base64')
+            : null,
           settings: message.alps?.Settings?.map(x => {
-            return  {
+            return {
               id: x.id,
-              value: x.Val
-            }
-          })
+              value: x.Val,
+            };
+          }),
         };
       }
       this.remoteAddress = message.remoteAddress;
