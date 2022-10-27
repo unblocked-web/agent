@@ -109,12 +109,10 @@ export default class Pool extends TypedEventEmitter<{
   }
 
   public async createMitmProxy(): Promise<MitmProxy> {
-    if (!this.certificateGenerator) {
-      this.certificateGenerator = MitmProxy.createCertificateGenerator(
-        this.options.certificateStore,
-        this.options.dataDir,
-      );
-    }
+    this.certificateGenerator ??= MitmProxy.createCertificateGenerator(
+      this.options.certificateStore,
+      this.options.dataDir,
+    );
     return await MitmProxy.start(this.certificateGenerator);
   }
 
@@ -171,7 +169,10 @@ export default class Pool extends TypedEventEmitter<{
       }
       this.browsersById.clear();
 
-      if (this.certificateGenerator) this.certificateGenerator.close();
+      if (this.certificateGenerator) {
+        this.certificateGenerator.close();
+        this.certificateGenerator = null;
+      }
 
       if (this.mitmStartPromise) {
         this.mitmStartPromise.then(x => x.close()).catch(err => err);

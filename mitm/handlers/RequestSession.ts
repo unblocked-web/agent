@@ -112,8 +112,7 @@ export default class RequestSession
       x => resource.requestTime - x.responseTime < 5e3,
     );
     if (redirect) {
-      const redirectChain = [redirect.url, ...redirect.redirectChain];
-      resourceRedirect.redirectChain = redirectChain;
+      resourceRedirect.redirectChain = [redirect.url, ...redirect.redirectChain];
     }
   }
 
@@ -131,7 +130,7 @@ export default class RequestSession
   }
 
   public async lookupDns(host: string): Promise<string> {
-    if (this.dns) {
+    if (this.dns && !this.isClosing) {
       try {
         return await this.dns.lookupIp(host);
       } catch (error) {

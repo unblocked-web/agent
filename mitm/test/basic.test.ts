@@ -7,6 +7,7 @@ import { AddressInfo, Socket } from 'net';
 import * as WebSocket from 'ws';
 import { createPromise } from '@ulixee/commons/lib/utils';
 import IHttpResourceLoadDetails from '@unblocked-web/specifications/agent/net/IHttpResourceLoadDetails';
+import CertificateGenerator from '@unblocked-web/agent-mitm-socket/lib/CertificateGenerator';
 import HttpRequestHandler from '../handlers/HttpRequestHandler';
 import RequestSession, { IRequestSessionRequestEvent } from '../handlers/RequestSession';
 import MitmServer from '../lib/MitmProxy';
@@ -15,6 +16,7 @@ import HttpUpgradeHandler from '../handlers/HttpUpgradeHandler';
 import { parseRawHeaders } from '../lib/Utils';
 import IBrowserRequestMatcher from '../interfaces/IBrowserRequestMatcher';
 import env from '../env';
+import { MitmProxy } from '../index';
 
 const mocks = {
   httpRequestHandler: {
@@ -24,8 +26,11 @@ const mocks = {
     determineResourceType: jest.spyOn(HeadersHandler, 'determineResourceType'),
   },
 };
+let certificateGenerator: CertificateGenerator;
 
 beforeAll(() => {
+  certificateGenerator = MitmProxy.createCertificateGenerator();
+  Helpers.onClose(() => certificateGenerator.close(), true);
   mocks.HeadersHandler.determineResourceType.mockImplementation(async () => {
     return {
       resourceType: 'Document',
@@ -43,7 +48,7 @@ afterEach(Helpers.afterEach);
 describe('basic MitM tests', () => {
   it('should send request through proxy', async () => {
     const httpServer = await Helpers.runHttpServer();
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 
@@ -63,7 +68,7 @@ describe('basic MitM tests', () => {
         response.setHeader('x-test', ['1', '2']);
       },
     });
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 
@@ -94,7 +99,7 @@ describe('basic MitM tests', () => {
       return res1.end('Secure as anything!');
     });
 
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 
@@ -110,7 +115,7 @@ describe('basic MitM tests', () => {
 
   it('should send an https request through upstream proxy', async () => {
     const httpServer = await Helpers.runHttpServer();
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
     const upstreamProxyHost = httpServer.url.replace(/\/$/, '');
@@ -150,7 +155,7 @@ describe('basic MitM tests', () => {
 
     const serverPort = (server.address() as AddressInfo).port;
 
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 
@@ -177,7 +182,7 @@ describe('basic MitM tests', () => {
         expect(headers1.last).toBe('1');
       },
     });
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 
@@ -196,13 +201,13 @@ describe('basic MitM tests', () => {
 
   it('should copy post data', async () => {
     const httpServer = await Helpers.runHttpServer();
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
     const session = createSession(mitmServer);
 
     const requestFn = jest.fn();
-    session.on('request', requestFn)
+    session.on('request', requestFn);
     const resourcePromise = new Promise<IRequestSessionRequestEvent>(resolve =>
       session.on('response', resolve),
     );
@@ -232,14 +237,14 @@ describe('basic MitM tests', () => {
 
   it('should support large post data', async () => {
     const httpServer = await Helpers.runHttpServer();
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 
     const session = createSession(mitmServer);
 
     const requestFn = jest.fn();
-    session.on('request', requestFn)
+    session.on('request', requestFn);
     const proxyCredentials = session.getProxyCredentials();
     const buffers: Buffer[] = [];
     const copyBuffer = Buffer.from('ASDGASDFASDWERWER@#$%#$%#$%#$%#DSFSFGDBSDFGD$%^$%^$%');
@@ -277,7 +282,7 @@ describe('basic MitM tests', () => {
 
   it('should modify websocket upgrade headers', async () => {
     const httpServer = await Helpers.runHttpServer();
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     const upgradeSpy = jest.spyOn(HttpUpgradeHandler.prototype, 'onUpgrade');
     const requestSpy = jest.spyOn(HttpRequestHandler.prototype, 'onRequest');
     Helpers.needsClosing.push(mitmServer);
@@ -340,7 +345,7 @@ describe('basic MitM tests', () => {
   it('should intercept requests', async () => {
     mocks.HeadersHandler.determineResourceType.mockRestore();
     const httpServer = await Helpers.runHttpServer();
-    const mitmServer = await MitmServer.start();
+    const mitmServer = await MitmServer.start(certificateGenerator);
     Helpers.needsClosing.push(mitmServer);
     const proxyHost = `http://localhost:${mitmServer.port}`;
 

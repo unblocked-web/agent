@@ -6,7 +6,6 @@ import * as WebSocket from 'ws';
 import { getTlsConnection, httpGetWithSocket } from '@unblocked-web/agent-testing/helpers';
 import * as https from 'https';
 import { IncomingMessage } from 'http';
-import * as tls from 'tls';
 import MitmSocket from '../index';
 import MitmSocketSession from '../lib/MitmSocketSession';
 

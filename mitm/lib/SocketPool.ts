@@ -6,6 +6,7 @@ import Resolvable from '@ulixee/commons/lib/Resolvable';
 import { CanceledPromiseError } from '@ulixee/commons/interfaces/IPendingWaitEvent';
 import { ClientHttp2Session } from 'http2';
 import RequestSession from '../handlers/RequestSession';
+import Http2SessionBinding from './Http2SessionBinding';
 
 export default class SocketPool {
   public alpn: string;
@@ -42,9 +43,14 @@ export default class SocketPool {
       const alpn = await this.queue.run(() => Promise.resolve(this.alpn));
       if (alpn) return alpn === 'h2';
     }
-    const socket = await this.getSocket(isWebsocket, createSocket);
-    this.freeSocket(socket);
-    return socket.isHttp2();
+    try {
+      const socket = await this.getSocket(isWebsocket, createSocket);
+      this.freeSocket(socket);
+      return socket.isHttp2();
+    } catch (err) {
+      if (this.session.isClosing) return false;
+      throw err;
+    }
   }
 
   public getSocket(
@@ -95,6 +101,7 @@ export default class SocketPool {
         session.mitmSocket.close();
         session.client.destroy();
         session.client.unref();
+        session.binding.events.close();
         if (!session.client.socket.destroyed) session.client.socket.destroy();
         session.client.close();
       } catch (err) {
@@ -115,10 +122,14 @@ export default class SocketPool {
     return this.http2Sessions[0];
   }
 
-  public registerHttp2Session(client: ClientHttp2Session, mitmSocket: MitmSocket): void {
+  public registerHttp2Session(
+    client: ClientHttp2Session,
+    mitmSocket: MitmSocket,
+    binding: Http2SessionBinding,
+  ): void {
     if (this.http2Sessions.some(x => x.client === client)) return;
 
-    const entry = { mitmSocket, client };
+    const entry = { mitmSocket, client, binding };
     this.http2Sessions.push(entry);
     this.events.on(client, 'close', () => this.closeHttp2Session(entry));
     this.events.on(mitmSocket, 'close', () => this.closeHttp2Session(entry));
@@ -151,4 +162,5 @@ export default class SocketPool {
 interface IHttp2Session {
   client: ClientHttp2Session;
   mitmSocket: MitmSocket;
+  binding: Http2SessionBinding;
 }

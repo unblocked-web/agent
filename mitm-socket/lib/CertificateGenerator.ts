@@ -16,7 +16,6 @@ export default class CertificateGenerator extends BaseIpcHandler {
   protected logger: IBoundLog = log.createChild(module);
 
   private pendingCertsById = new Map<number, Resolvable<{ cert: string; expireDate: number }>>();
-
   private privateKey: Buffer;
   private waitForInit = new Resolvable<void>();
   private hasWaitForInitListeners = false;
@@ -35,6 +34,7 @@ export default class CertificateGenerator extends BaseIpcHandler {
   }
 
   public async getCertificate(host: string): Promise<{ cert: Buffer; key: Buffer }> {
+    if (this.isClosing) return { key: null, cert: null };
     await this.waitForConnected;
     const existing = this.store?.get(host);
     if (existing) {
