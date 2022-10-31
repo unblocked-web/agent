@@ -1,3 +1,10 @@
+----
+
+**NOTICE**
+📝 This module is merged into the unblocked monorepo for future development!
+
+----
+
 # Unblocked Agent
 
 Unblocked Agent is an automated web browser that's built to be controlled from every facet by a developer. It fully implements the Unblocked Agent [specifications][spec], which is a generic plug-in structure to support common Bot detection evasions. When combined with the [Unblocked Plugins][plugins], the Unblocked Agent is very difficult to block.
