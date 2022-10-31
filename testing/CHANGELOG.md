@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.12](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.11...v2.0.0-alpha.12) (2022-10-31)
+
+
+### Features
+
+* **core:** convert to use .env.defaults files ([f2f0832](https://github.com/unblocked-web/unblocked/commit/f2f083289c76bd7f544cb7048402761d5288febc))
+
+
+
+
+
 # [2.0.0-alpha.11](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.10...v2.0.0-alpha.11) (2022-10-03)
 
 

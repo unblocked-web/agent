@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-alpha.12](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.11...v2.0.0-alpha.12) (2022-10-31)
+
+
+### Bug Fixes
+
+* **mitm:** try to handle socket timeouts ([27adbb0](https://github.com/unblocked-web/unblocked/commit/27adbb0f27e7b6a2efab156c1221201c84d3d85e))
+
+
+
+
+
 # [2.0.0-alpha.11](https://github.com/unblocked-web/unblocked/compare/v2.0.0-alpha.10...v2.0.0-alpha.11) (2022-10-03)
 
 
