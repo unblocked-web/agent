@@ -2198,7 +2198,7 @@
     progress "^2.0.3"
     tar "^6.1.11"
 
-"@ulixee/repo-tools@^1.0.17", "@ulixee/repo-tools@^1.0.21":
+"@ulixee/repo-tools@^1.0.21":
   version "1.0.21"
   resolved "https://registry.yarnpkg.com/@ulixee/repo-tools/-/repo-tools-1.0.21.tgz#357808c570872494fdf9c8255b23038b36d3992e"
   integrity sha512-Oflv3YtPAYnZWA291PZ7X1AP1HbqHR4HSm+yrOIfUqQ2r97Un5eYdU7f/ZRqd0SGkj9/A/9i+Ad09XKXOHeBBg==
